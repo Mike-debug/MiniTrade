@@ -1,0 +1,25 @@
+//
+// Created by Mike_Wei on 5/4/2024.
+//
+
+#ifndef MINITRADE_GETTIMESTAMP_H
+#define MINITRADE_GETTIMESTAMP_H
+
+#include <iostream>
+#include <chrono>
+
+unsigned long long getTimeStamp() {
+    // 获取当前时间点
+    auto now = std::chrono::system_clock::now();
+
+    // 将时间点转换为毫秒
+    auto duration = now.time_since_epoch();
+    auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+
+    // 输出 13 位时间戳
+    std::cout << "13 位时间戳: " << millis << std::endl;
+
+    return millis;
+}
+
+#endif //MINITRADE_GETTIMESTAMP_H

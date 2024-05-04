@@ -10,7 +10,8 @@
 #include <websocketpp/common/thread.hpp>
 #include <websocketpp/common/memory.hpp>
 
-#include "CommonUtils/generateSignature.h"
+#include "CommonUtils/generateSignature"
+#include "CommonUtils/getTimeStamp"
 
 using namespace std;
 
