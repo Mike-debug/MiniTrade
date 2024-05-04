@@ -1,0 +1,150 @@
+//
+// Created by Mike_Wei on 5/4/2024.
+//
+
+#ifndef MINITRADE_TESTNEST_
+#define MINITRADE_TESTNEST_
+
+#include <cstdlib>
+#include <iostream>
+#include <map>
+#include <string>
+
+#include <websocketpp/config/asio_no_tls_client.hpp>
+#include <websocketpp/config/asio_client.hpp>
+#include <websocketpp/client.hpp>
+#include <utility>
+
+#include <json/json.h>
+
+#include "infrastructure/webSocket"
+
+#include "CommonUtils/jsonSpecificUtils"
+#include "commonUtils.h"
+
+namespace testnet {
+    int connect_url(websocket_endpoint &endpoint, std::string &testnet_binance_url);
+
+    void test_ws_connect(websocket_endpoint &endpoint, int connect_id, int testNum);
+
+    int disconnect(websocket_endpoint &endpoint, int connect_id = 0, std::string reason = "");
+
+    std::pair<double, double> calculateTimeDiffDelay(websocket_endpoint &endpoint, int connect_id = 0);
+
+    std::vector<unsigned long long> getTimeStamps(const std::vector<std::string> &msgs, unsigned int msgNum);
+
+    std::pair<double, double> calculateTimeDiffDelaySub(const std::vector<unsigned long long> &timeStamps);
+
+    std::pair<double, double> getTimeDelay();
+}
+
+
+int testnet::connect_url(websocket_endpoint &endpoint, std::string &testnet_binance_url) {
+    /* connect */
+    int id = endpoint.connect(testnet_binance_url);
+    if (id != -1) {
+        std::cout << "> Created connection with id " << id << std::endl;
+    } else {
+        exit(0);
+    }
+    return id;
+}
+
+void testnet::test_ws_connect(websocket_endpoint &endpoint, int connect_id = 0, int testNum = 5) {
+    /* test net */
+    std::string input{};
+    while (testNum > 0) {
+        Sleep(2000);
+        --testNum;
+        input = "{\"id\":1,\"method\":\"time\"}\n";
+        endpoint.send(connect_id, input);
+    }
+    Sleep(2000);
+}
+
+int testnet::disconnect(websocket_endpoint &endpoint, int connect_id, std::string reason) {
+    /* close */
+    int close_code = websocketpp::close::status::normal;
+    endpoint.close(connect_id, close_code, std::move(reason));
+    Sleep(2000);
+    return close_code;
+}
+
+std::pair<double, double> testnet::calculateTimeDiffDelay(websocket_endpoint &endpoint, int connect_id) {
+    using namespace std;
+
+    /* get msg record */
+    auto msgs = endpoint.get_metadata(connect_id)->getMst();
+
+    /* forfeit the failed tests */
+    auto msgNum = msgs.size() & (~0x01);
+
+    /* parse timestamps */
+    vector<unsigned long long> timeStamps = getTimeStamps(msgs, msgNum);
+
+    /*  calculate the diff and delay */
+    auto ret = calculateTimeDiffDelaySub(timeStamps);
+
+    return ret;
+}
+
+std::vector<unsigned long long> testnet::getTimeStamps(const std::vector<std::string> &msgs, unsigned int msgNum) {
+    std::vector<unsigned long long> timeStamps{};
+    // 创建 JSON 对象
+    Json::Value root;
+    // 解析 JSON 字符串
+    Json::Reader reader;
+    for (int i{0}; i < msgNum; i += 2) {
+        unsigned long long localSentTime{};
+        unsigned long long localRecvTime{};
+        unsigned long long SeverSentTime{};
+        try {
+            localSentTime = stoull(msgs.at(i).substr(3, 13));
+            localRecvTime = stoull(msgs.at(i + 1).substr(3, 13));
+            reader.parse(msgs.at(i + 1).substr(18), root);
+            SeverSentTime = stoull(root["result"]["serverTime"].asString());
+        }
+        catch (...) {
+            std::cout << "exception while parsing time stamps" << std::endl;
+            continue;
+        }
+        timeStamps.push_back(localSentTime);
+        timeStamps.push_back(localRecvTime);
+        timeStamps.push_back(SeverSentTime);
+    }
+    return timeStamps;
+}
+
+std::pair<double, double> testnet::calculateTimeDiffDelaySub(const std::vector<unsigned long long> &timeStamps) {
+    double diff{};
+    double delay{};
+    for (int i{0}; i < timeStamps.size(); i += 3) {
+        diff += (timeStamps[i] + timeStamps[i + 1] - 2 * timeStamps[i + 2]) * 0.5;
+        delay += (timeStamps[i + 1] - timeStamps[i]) * 0.5;
+    }
+    diff /= (timeStamps.size() / 3);
+    delay /= (timeStamps.size() / 3);
+    auto ret = std::make_pair(diff, delay);
+    return ret;
+}
+
+std::pair<double, double> testnet::getTimeDelay() {
+
+    websocket_endpoint endpoint;
+    std::string testnet_binance_url{"wss://testnet.binance.vision/ws-api/v3"};
+
+    /* connect */
+    int id = connect_url(endpoint, testnet_binance_url);
+
+    /* test net */
+    test_ws_connect(endpoint, id, 5);
+
+    /* calculate diff and delay */
+    auto ret = calculateTimeDiffDelay(endpoint, id);
+
+    /* close */
+    disconnect(endpoint, id);
+    return ret;
+}
+
+#endif //MINITRADE_TESTNEST_
