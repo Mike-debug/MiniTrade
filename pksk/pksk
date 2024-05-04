@@ -1,0 +1,9 @@
+//
+// Created by Mike_Wei on 5/4/2024.
+//
+
+#ifndef MINITRADE_PKSK_H
+#define MINITRADE_PKSK_H
+const std::string public_key{"4r7CZpVGiBQs7G8VqMLeNv0v1daOub0fGo5GkLNCnYWm8k5FpL4uGImzgefo9qWl"};
+const std::string private_key{"r30z3j8nyAlVWlFKp9f5Rhqkkb1hRiqIjSedmlndFRoyreO65uguMsJmqLEchbpG"};
+#endif //MINITRADE_PKSK_H

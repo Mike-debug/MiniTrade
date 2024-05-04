@@ -2,254 +2,97 @@
 #include <iostream>
 #include <map>
 #include <string>
-#include <sstream>
 
 #include <websocketpp/config/asio_no_tls_client.hpp>
 #include <websocketpp/config/asio_client.hpp>
 #include <websocketpp/client.hpp>
-#include <websocketpp/common/thread.hpp>
-#include <websocketpp/common/memory.hpp>
 
-#include "CommonUtils/generateSignature"
-#include "CommonUtils/getTimeStamp"
+#include <json/json.h>
+
+#include "infrastructure/webSocket"
+
+#include "CommonUtils/jsonSpecificUtils"
+#include "commonUtils.h"
 
 using namespace std;
 
-typedef websocketpp::client<websocketpp::config::asio_tls_client> client;
-typedef websocketpp::lib::shared_ptr<boost::asio::ssl::context> context_ptr;
+pair<double, double> getTimeDelay() {
+    websocket_endpoint endpoint;
 
-context_ptr on_tls_init(websocketpp::connection_hdl) {
-    context_ptr ctx = websocketpp::lib::make_shared<boost::asio::ssl::context>(boost::asio::ssl::context::sslv23);
+    std::string input{"connect wss://testnet.binance.vision/ws-api/v3"};
 
-    try {
-        ctx->set_options(boost::asio::ssl::context::default_workarounds |
-                         boost::asio::ssl::context::no_sslv2 |
-                         boost::asio::ssl::context::no_sslv3 |
-                         boost::asio::ssl::context::single_dh_use);
-    } catch (std::exception &e) {
-        std::cout << e.what() << std::endl;
-    }
-    return ctx;
-}
-
-class connection_metadata {
-public:
-    typedef websocketpp::lib::shared_ptr<connection_metadata> ptr;
-
-    connection_metadata(int id, websocketpp::connection_hdl hdl, std::string uri)
-            : m_id(id), m_hdl(hdl), m_status("Connecting"), m_uri(uri), m_server("N/A") {}
-
-    void on_open(client *c, websocketpp::connection_hdl hdl) {
-        m_status = "Open";
-
-        client::connection_ptr con = c->get_con_from_hdl(hdl);
-        m_server = con->get_response_header("Server");
+    int id = endpoint.connect(input.substr(8));
+    if (id != -1) {
+        std::cout << "> Created connection with id " << id << std::endl;
     }
 
-    void on_fail(client *c, websocketpp::connection_hdl hdl) {
-        m_status = "Failed";
+    int done = 5;
+    while (done > 0) {
+        Sleep(2000);
+        --done;
+        input = "send 0 {\"id\":1,\"method\":\"time\"}\n";
+        std::stringstream ss(input);
 
-        client::connection_ptr con = c->get_con_from_hdl(hdl);
-        m_server = con->get_response_header("Server");
-        m_error_reason = con->get_ec().message();
+        std::string cmd;
+        std::string message;
+
+        ss >> cmd >> id;
+        std::getline(ss, message);
+
+        endpoint.send(id, message);
     }
+    Sleep(2000);
+    auto msgs = endpoint.get_metadata(id)->getMst();
+    auto msgNum = msgs.size() & (~0x01);
+    vector<unsigned long long> timeStamps{};
+    cout << "msgNum: " << msgNum << endl;
+    // 创建 JSON 对象
+    Json::Value root;
 
-    void on_close(client *c, websocketpp::connection_hdl hdl) {
-        m_status = "Closed";
-        client::connection_ptr con = c->get_con_from_hdl(hdl);
-        std::stringstream s;
-        s << "close code: " << con->get_remote_close_code() << " ("
-          << websocketpp::close::status::get_string(con->get_remote_close_code())
-          << "), close reason: " << con->get_remote_close_reason();
-        m_error_reason = s.str();
-    }
-
-    void on_message(websocketpp::connection_hdl, client::message_ptr msg) {
-        if (msg->get_opcode() == websocketpp::frame::opcode::text) {
-            m_messages.push_back("<< " + msg->get_payload());
+    // 解析 JSON 字符串
+    Json::Reader reader;
+    for (int i{0}; i < msgNum; ++i) {
+        if (!(i & (0x01))) {
+            timeStamps.emplace_back(stoull(msgs.at(i).substr(3, 13)));
         } else {
-            m_messages.push_back("<< " + websocketpp::utility::to_hex(msg->get_payload()));
+            timeStamps.emplace_back(stoull(msgs.at(i).substr(3, 13)));
+            reader.parse(msgs.at(i).substr(18), root);
+            timeStamps.emplace_back(stoull(root["result"]["serverTime"].asString()));
         }
     }
+    printVector(timeStamps);
 
-    websocketpp::connection_hdl get_hdl() const {
-        return m_hdl;
+    double diff{};
+    double delay{};
+    for (int i{0}; i < timeStamps.size(); i += 3) {
+        diff += (timeStamps[i] + timeStamps[i + 1] - 2 * timeStamps[i + 2]) * 0.5;
+        delay += (timeStamps[i + 1] - timeStamps[i]) * 0.5;
     }
+    diff /= (timeStamps.size() / 3);
+    delay /= (timeStamps.size() / 3);
 
-    int get_id() const {
-        return m_id;
-    }
+    auto ret = make_pair(diff, delay);
+    printPair(ret);
 
-    std::string get_status() const {
-        return m_status;
-    }
+    input = "close 0";
+    std::stringstream ss(input);
 
-    void record_sent_message(std::string message) {
-        m_messages.push_back(">> " + message);
-    }
+    std::string cmd;
+    int close_code = websocketpp::close::status::normal;
+    std::string reason;
 
-    friend std::ostream &operator<<(std::ostream &out, connection_metadata const &data);
+    ss >> cmd >> id >> close_code;
+    std::getline(ss, reason);
 
-private:
-    int m_id;
-    websocketpp::connection_hdl m_hdl;
-    std::string m_status;
-    std::string m_uri;
-    std::string m_server;
-    std::string m_error_reason;
-    std::vector<std::string> m_messages;
-};
-
-std::ostream &operator<<(std::ostream &out, connection_metadata const &data) {
-    out << "> URI: " << data.m_uri << "\n"
-        << "> Status: " << data.m_status << "\n"
-        << "> Remote Server: " << (data.m_server.empty() ? "None Specified" : data.m_server) << "\n"
-        << "> Error/close reason: " << (data.m_error_reason.empty() ? "N/A" : data.m_error_reason) << "\n";
-    out << "> Messages Processed: (" << data.m_messages.size() << ") \n";
-
-    std::vector<std::string>::const_iterator it;
-    for (it = data.m_messages.begin(); it != data.m_messages.end(); ++it) {
-        out << *it << "\n";
-    }
-
-    return out;
+    endpoint.close(id, close_code, reason);
+    Sleep(2000);
+    return ret;
 }
-
-class websocket_endpoint {
-public:
-    websocket_endpoint() : m_next_id(0) {
-        m_endpoint.clear_access_channels(websocketpp::log::alevel::all);
-        m_endpoint.clear_error_channels(websocketpp::log::elevel::all);
-
-        m_endpoint.init_asio();
-        m_endpoint.start_perpetual();
-
-        m_thread = websocketpp::lib::make_shared<websocketpp::lib::thread>(&client::run, &m_endpoint);
-    }
-
-    ~websocket_endpoint() {
-        m_endpoint.stop_perpetual();
-
-        for (con_list::const_iterator it = m_connection_list.begin(); it != m_connection_list.end(); ++it) {
-            if (it->second->get_status() != "Open") {
-                // Only close open connections
-                continue;
-            }
-
-            std::cout << "> Closing connection " << it->second->get_id() << std::endl;
-
-            websocketpp::lib::error_code ec;
-            m_endpoint.close(it->second->get_hdl(), websocketpp::close::status::going_away, "", ec);
-            if (ec) {
-                std::cout << "> Error closing connection " << it->second->get_id() << ": "
-                          << ec.message() << std::endl;
-            }
-        }
-
-        m_thread->join();
-    }
-
-    int connect(std::string const &uri) {
-        websocketpp::lib::error_code ec;
-
-        m_endpoint.set_tls_init_handler(&on_tls_init);
-        client::connection_ptr con = m_endpoint.get_connection(uri, ec);
-
-        if (ec) {
-            std::cout << "> Connect initialization error: " << ec.message() << std::endl;
-            std::cout << ec << std::endl;
-            return -1;
-        }
-
-        int new_id = m_next_id++;
-        connection_metadata::ptr metadata_ptr = websocketpp::lib::make_shared<connection_metadata>(new_id,
-                                                                                                   con->get_handle(),
-                                                                                                   uri);
-        m_connection_list[new_id] = metadata_ptr;
-
-        con->set_open_handler(websocketpp::lib::bind(
-                &connection_metadata::on_open,
-                metadata_ptr,
-                &m_endpoint,
-                websocketpp::lib::placeholders::_1
-        ));
-        con->set_fail_handler(websocketpp::lib::bind(
-                &connection_metadata::on_fail,
-                metadata_ptr,
-                &m_endpoint,
-                websocketpp::lib::placeholders::_1
-        ));
-        con->set_close_handler(websocketpp::lib::bind(
-                &connection_metadata::on_close,
-                metadata_ptr,
-                &m_endpoint,
-                websocketpp::lib::placeholders::_1
-        ));
-        con->set_message_handler(websocketpp::lib::bind(
-                &connection_metadata::on_message,
-                metadata_ptr,
-                websocketpp::lib::placeholders::_1,
-                websocketpp::lib::placeholders::_2
-        ));
-
-        m_endpoint.connect(con);
-
-        return new_id;
-    }
-
-    void close(int id, websocketpp::close::status::value code, std::string reason) {
-        websocketpp::lib::error_code ec;
-
-        con_list::iterator metadata_it = m_connection_list.find(id);
-        if (metadata_it == m_connection_list.end()) {
-            std::cout << "> No connection found with id " << id << std::endl;
-            return;
-        }
-
-        m_endpoint.close(metadata_it->second->get_hdl(), code, reason, ec);
-        if (ec) {
-            std::cout << "> Error initiating close: " << ec.message() << std::endl;
-        }
-    }
-
-    void send(int id, std::string message) {
-        websocketpp::lib::error_code ec;
-
-        con_list::iterator metadata_it = m_connection_list.find(id);
-        if (metadata_it == m_connection_list.end()) {
-            std::cout << "> No connection found with id " << id << std::endl;
-            return;
-        }
-
-        m_endpoint.send(metadata_it->second->get_hdl(), message, websocketpp::frame::opcode::text, ec);
-        if (ec) {
-            std::cout << "> Error sending message: " << ec.message() << std::endl;
-            return;
-        }
-
-        metadata_it->second->record_sent_message(message);
-    }
-
-    connection_metadata::ptr get_metadata(int id) const {
-        con_list::const_iterator metadata_it = m_connection_list.find(id);
-        if (metadata_it == m_connection_list.end()) {
-            return connection_metadata::ptr();
-        } else {
-            return metadata_it->second;
-        }
-    }
-
-private:
-    typedef std::map<int, connection_metadata::ptr> con_list;
-
-    client m_endpoint;
-    websocketpp::lib::shared_ptr<websocketpp::lib::thread> m_thread;
-
-    con_list m_connection_list;
-    int m_next_id;
-};
 
 int main() {
+    auto diffDelay = getTimeDelay();
+    DIFF = diffDelay.first;
+
     bool done = false;
     std::string input;
     websocket_endpoint endpoint;
@@ -291,11 +134,9 @@ int main() {
 
             std::string cmd;
             int id;
-            std::string message;
 
             ss >> cmd >> id;
-            std::getline(ss, message);
-
+            std::string message = std::move(getTradeMsgExample());
             cout << message << endl;
 
             endpoint.send(id, message);

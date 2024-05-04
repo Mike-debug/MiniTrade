@@ -1,0 +1,98 @@
+//
+// Created by Mike_Wei on 5/4/2024.
+//
+
+#ifndef MINITRADE_JSONSPECIFICUTILS_H
+#define MINITRADE_JSONSPECIFICUTILS_H
+
+#include <cstdio>
+#include <iostream>
+#include <map>
+#include <chrono>
+#include <sstream>
+#include <openssl/hmac.h>
+#include <openssl/sha.h>
+#include <string>
+#include <iomanip>
+#include "CommonUtils/getTimeStamp"
+#include "CommonUtils/generateSignature"
+#include "pksk/pksk"
+
+void replaceAll(std::string &str, const std::string &oldStr, const std::string &newStr) {
+    size_t pos = 0;
+    while ((pos = str.find(oldStr, pos)) != std::string::npos) {
+        str.replace(pos, oldStr.length(), newStr);
+        pos += newStr.length();
+    }
+}
+
+template<typename K, typename V>
+std::string convertMap2String(const std::map<K, V> m) {
+    std::stringstream ss{};
+    ss << "{";
+
+    auto lastIterator = m.end();
+    --lastIterator;
+
+    for (auto mt = m.begin(); mt != lastIterator; ++mt) {
+        ss << "\"" << mt->first << "\": \"" << mt->second << "\",";
+    }
+    ss << "\"" << lastIterator->first << "\": \"" << lastIterator->second << "\"";
+
+    ss << "}";
+    auto ansStr = ss.str();
+    replaceAll(ansStr, "\"{", "{");
+    replaceAll(ansStr, "}\"", "}");
+    return ansStr;
+}
+
+std::string getStringFromMapPayLoadString(const std::map<std::string, std::string> &paramMap) {
+    std::string payLoad{};
+    for (const auto &pair : paramMap) {
+        payLoad += pair.first + "=" + pair.second + "&";
+    }
+    // 检查字符串是否为空
+    if (!payLoad.empty()) {
+        // 删除最后一个字符
+        payLoad.erase(payLoad.size() - 1);
+    }
+    return payLoad;
+}
+
+std::map<std::string, std::string> getTradeExampleParamMap() {
+    // getTimeStamp();
+    std::map<std::string, std::string> paramMap{
+            {"apiKey",           public_key},
+            {"newOrderRespType", "ACK"},
+            {"price",            "52000.00"},
+            {"quantity",         "0.01000000"},
+            {"recvWindow",       "1000"},
+            {"side",             "SELL"},
+            {"symbol",           "BTCUSDT"},
+            {"timeInForce",      "GTC"},
+            {"timestamp",        std::to_string(getTimeStamp())},
+            {"type",             "LIMIT"}
+    };
+
+    auto payLoad = getStringFromMapPayLoadString(paramMap);
+    std::cout << payLoad << std::endl;
+
+    auto signature = calculateHMAC(payLoad, private_key);
+    paramMap.insert({"signature", signature});
+    return paramMap;
+}
+
+std::map<std::string, std::string> getTradeExampleMap() {
+    std::map<std::string, std::string> TradeExampleMap{
+            {"id",     std::to_string(getTimeStamp())},
+            {"method", "order.place"},
+            {"params", convertMap2String(getTradeExampleParamMap())},
+    };
+    return TradeExampleMap;
+}
+
+std::string getTradeMsgExample() {
+    return convertMap2String(getTradeExampleMap());
+}
+
+#endif //MINITRADE_JSONSPECIFICUTILS_H

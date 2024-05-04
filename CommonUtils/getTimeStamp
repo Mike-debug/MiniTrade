@@ -8,6 +8,8 @@
 #include <iostream>
 #include <chrono>
 
+long long DIFF{0LL};
+
 unsigned long long getTimeStamp() {
     // 获取当前时间点
     auto now = std::chrono::system_clock::now();
@@ -17,9 +19,7 @@ unsigned long long getTimeStamp() {
     auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 
     // 输出 13 位时间戳
-    std::cout << "13 位时间戳: " << millis << std::endl;
-
-    return millis;
+    return millis - DIFF;
 }
 
 #endif //MINITRADE_GETTIMESTAMP_H
