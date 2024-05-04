@@ -4,6 +4,7 @@
 
 #ifndef WEBSOCKETCLIENT_GENERATESIGNATURE_H
 #define WEBSOCKETCLIENT_GENERATESIGNATURE_H
+
 #include <sstream>
 #include <iostream>
 #include <openssl/hmac.h>
@@ -16,7 +17,7 @@ std::string calculateHMAC(const std::string &message, const std::string &key) {
     unsigned int digestLength;
 
     HMAC_CTX *ctx = HMAC_CTX_new();
-    HMAC_Init_ex(ctx, key.c_str(), key.length(), EVP_sha256(), NULL);
+    HMAC_Init_ex(ctx, key.c_str(), key.length(), EVP_sha256(), nullptr);
     HMAC_Update(ctx, reinterpret_cast<const unsigned char *>(message.c_str()), message.length());
     HMAC_Final(ctx, digest, &digestLength);
     HMAC_CTX_free(ctx);
