@@ -2,8 +2,8 @@
 // Created by Mike_Wei on 5/4/2024.
 //
 
-#ifndef MINITRADE_TESTNEST_
-#define MINITRADE_TESTNEST_
+#ifndef MINITRADE_TESTNET_
+#define MINITRADE_TESTNET_
 
 #include <cstdlib>
 #include <iostream>
@@ -37,7 +37,6 @@ namespace testnet {
 
     std::pair<double, double> getTimeDelay();
 }
-
 
 int testnet::connect_url(websocket_endpoint &endpoint, std::string &testnet_binance_url) {
     /* connect */
@@ -147,4 +146,4 @@ std::pair<double, double> testnet::getTimeDelay() {
     return ret;
 }
 
-#endif //MINITRADE_TESTNEST_
+#endif //MINITRADE_TESTNET_

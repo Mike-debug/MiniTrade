@@ -4,6 +4,7 @@
 
 #ifndef MINITRADE_WEBSOCKET_H
 #define MINITRADE_WEBSOCKET_H
+
 #include <cstdlib>
 #include <iostream>
 #include <map>
@@ -70,10 +71,10 @@ public:
 
     void on_message(websocketpp::connection_hdl, client::message_ptr msg) {
         if (msg->get_opcode() == websocketpp::frame::opcode::text) {
-            m_messages.push_back("<< " + std::to_string(getTimeStamp()) + ": " + msg->get_payload());
+            m_messages.push_back("<< " + getTimeStamps() + msg->get_payload());
         } else {
             m_messages.push_back(
-                    "<< " + std::to_string(getTimeStamp()) + ": " + websocketpp::utility::to_hex(msg->get_payload()));
+                    "<< " + getTimeStamps() + websocketpp::utility::to_hex(msg->get_payload()));
         }
     }
 
@@ -90,11 +91,15 @@ public:
     }
 
     std::vector<std::string> getMst() const {
-        return m_messages;
+        return std::vector<std::string>{m_messages};
     }
 
     void record_sent_message(std::string message) {
-        m_messages.push_back(">> " + std::to_string(getTimeStamp()) + ": " + message);
+        m_messages.push_back(">> " + getTimeStamps() + message);
+    }
+
+    void clearMsg() {
+        m_messages.clear();
     }
 
     friend std::ostream &operator<<(std::ostream &out, connection_metadata const &data);

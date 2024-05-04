@@ -12,9 +12,9 @@
 #include "infrastructure/webSocket"
 
 #include "CommonUtils/jsonSpecificUtils"
-#include "infrastructure/testNest"
+#include "infrastructure/testNet"
 
-int main() {
+int manualOp() {
     using namespace std;
     auto diffDelay = testnet::getTimeDelay();
     DIFF = diffDelay.first;
@@ -22,7 +22,6 @@ int main() {
     bool done = false;
     std::string input;
     websocket_endpoint endpoint;
-
     while (!done) {
         std::cout << "Enter Command: ";
         std::getline(std::cin, input);
@@ -92,5 +91,39 @@ int main() {
         }
     }
 
+    return 0;
+}
+
+int BTCUSDT_TKR() {
+    using namespace std;
+    auto diffDelay = testnet::getTimeDelay();
+    DIFF = diffDelay.first;
+
+    websocket_endpoint endpoint;
+    string url{"wss://testnet.binance.vision/ws-api/v3"};
+    auto id = testnet::connect_url(endpoint, url);
+
+    string queryMsg{
+            "{\"id\":\"043a7cf2-bde3-4888-9604-c8ac41fcba4d\",\"method\":\"ticker.price\",\"params\":{\"symbol\":\"BTCUSDT\"}}"};
+    while (true) {
+        Sleep(2000);
+        endpoint.send(id, queryMsg);
+        connection_metadata::ptr metadata = endpoint.get_metadata(id);
+        if (metadata) {
+            auto msgs = (*metadata).getMst();
+            cout << msgs[msgs.size() - 2] << endl;
+            cout << msgs[msgs.size() - 1] << endl;
+            metadata->clearMsg();
+        } else {
+            std::cout << "> Unknown connection id " << id << std::endl;
+            break;
+        }
+    }
+
+    return 0;
+}
+
+int main() {
+    BTCUSDT_TKR();
     return 0;
 }
