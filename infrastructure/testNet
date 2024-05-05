@@ -74,13 +74,20 @@ std::pair<double, double> testnet::calculateTimeDiffDelay(websocket_endpoint &en
 
     /* get msg record */
     auto msgs = endpoint.get_metadata(connect_id)->getMst();
-
+    if (cfg::ifLog) {
+        printf("msgs\n");
+        printVector(msgs);
+    }
     /* forfeit the failed tests */
     auto msgNum = msgs.size() & (~0x01);
+    if (cfg::ifLog) { printf("msgNum: %llu\n", msgNum); }
 
     /* parse timestamps */
     vector<unsigned long long> timeStamps = getTimeStamps(msgs, msgNum);
-
+    if (cfg::ifLog) {
+        printf("timeStamps:\n");
+        printVector(timeStamps);
+    }
     /*  calculate the diff and delay */
     auto ret = calculateTimeDiffDelaySub(timeStamps);
 
@@ -115,11 +122,15 @@ std::vector<unsigned long long> testnet::getTimeStamps(const std::vector<std::st
 }
 
 std::pair<double, double> testnet::calculateTimeDiffDelaySub(const std::vector<unsigned long long> &timeStamps) {
-    double diff{};
-    double delay{};
+    double diff{0.};
+    double delay{0.};
     for (int i{0}; i < timeStamps.size(); i += 3) {
-        diff += (timeStamps[i] + timeStamps[i + 1] - 2 * timeStamps[i + 2]) * 0.5;
-        delay += (timeStamps[i + 1] - timeStamps[i]) * 0.5;
+        diff += (
+                        static_cast<long long>(timeStamps[i])
+                        + static_cast<long long>(timeStamps[i + 1])
+                        - (static_cast<long long>( timeStamps[i + 2]) << 1)
+                ) * 0.5;
+        delay += (static_cast<long long>(timeStamps[i + 1]) - static_cast<long long>(timeStamps[i])) >> 1;
     }
     diff /= (timeStamps.size() / 3);
     delay /= (timeStamps.size() / 3);

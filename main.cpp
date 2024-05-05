@@ -7,17 +7,39 @@
 #include <websocketpp/client.hpp>
 #include <utility>
 
-#include <json/json.h>
-
 #include "infrastructure/webSocket"
-
-#include "CommonUtils/jsonSpecificUtils"
 #include "infrastructure/testNet"
 
-int manualOp() {
+void updateDiff();
+
+int manualOp();
+
+int BTCUSDT_TKR();
+
+int main() {
+    manualOp();
+    return 0;
+}
+
+void updateDiff() {
     using namespace std;
     auto diffDelay = testnet::getTimeDelay();
-    DIFF = diffDelay.first;
+    if (cfg::ifLog) {
+        std::cout << "diff and delay" << std::endl;
+        printPair(diffDelay);
+        cout << "DIFF before: " << DIFF << endl;
+    }
+    DIFF = static_cast<long long>(diffDelay.first);
+    if (cfg::ifLog) {
+        cout << "DIFF after: " << DIFF << endl;
+    }
+}
+
+int manualOp() {
+    cfg::refreshConfig();
+
+    using namespace std;
+    updateDiff();
 
     bool done = false;
     std::string input;
@@ -54,17 +76,46 @@ int manualOp() {
             std::getline(ss, message);
 
             endpoint.send(id, message);
-        } else if (input.substr(0, 5) == "trade") {
+        } else if (input.substr(0, 4) == "sell") {
             std::stringstream ss(input);
 
             std::string cmd;
             int id;
+            std::string price;
 
-            ss >> cmd >> id;
-            std::string message = std::move(getTradeMsgExample());
+            ss >> cmd >> id >> price;
+            std::string message = std::move(getTradeMsgFromConfig(true, price, DIFF));
+
+            endpoint.send(id, message);
+        } else if (input.substr(0, 3) == "buy") {
+            std::stringstream ss(input);
+
+            std::string cmd;
+            int id;
+            std::string price;
+
+            ss >> cmd >> id >> price;
+            std::string message = std::move(getTradeMsgFromConfig(false, price, DIFF));
+
+            endpoint.send(id, message);
+        } else if (input.substr(0, 6) == "cancel") {
+            std::stringstream ss(input);
+
+            std::string cmd;
+            int id;
+            std::string orderId;
+
+            ss >> cmd >> id >> orderId;
+            std::string message = std::move(getCancelMsgFromConfig(orderId, DIFF));
             cout << message << endl;
 
             endpoint.send(id, message);
+        } else if (input.substr(0, 13) == "refreshConfig") {
+            cfg::refreshConfig();
+        } else if (input.substr(0, 10) == "showConfig") {
+            cfg::printConfig();
+        } else if (input.substr(0, 10) == "updateDiff") {
+            updateDiff();
         } else if (input.substr(0, 5) == "close") {
             std::stringstream ss(input);
 
@@ -120,10 +171,5 @@ int BTCUSDT_TKR() {
         }
     }
 
-    return 0;
-}
-
-int main() {
-    BTCUSDT_TKR();
     return 0;
 }

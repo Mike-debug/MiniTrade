@@ -13,7 +13,7 @@
 
 long long DIFF{0LL};
 
-unsigned long long getTimeStamp() {
+unsigned long long getTimeStamp(long long diff = 0LL) {
     // 获取当前时间点
     auto now = std::chrono::system_clock::now();
 
@@ -22,9 +22,8 @@ unsigned long long getTimeStamp() {
     auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 
     // 输出 13 位时间戳
-    return millis - DIFF;
+    return millis - diff;
 }
-
 
 
 // 函数将13位时间戳转换为日期时间字符串
@@ -60,7 +59,8 @@ std::string getCurrentDateTimeString() {
     return oss.str();
 }
 
-std::string getTimeStamps(){
-    return std::to_string(getTimeStamp()) + ": "+getCurrentDateTimeString()+ ": ";
+std::string getTimeStamps() {
+    return std::to_string(getTimeStamp()) + ": ";
 }
+
 #endif //MINITRADE_GETTIMESTAMP_H
