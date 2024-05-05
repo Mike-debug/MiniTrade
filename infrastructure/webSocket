@@ -16,6 +16,7 @@
 #include <websocketpp/client.hpp>
 #include <websocketpp/common/thread.hpp>
 #include <websocketpp/common/memory.hpp>
+#include <utility>
 
 #include "CommonUtils/getTimeStamp"
 
@@ -23,7 +24,7 @@
 typedef websocketpp::client<websocketpp::config::asio_tls_client> client;
 typedef websocketpp::lib::shared_ptr<boost::asio::ssl::context> context_ptr;
 
-context_ptr on_tls_init(websocketpp::connection_hdl) {
+context_ptr on_tls_init(const websocketpp::connection_hdl &) {
     context_ptr ctx = websocketpp::lib::make_shared<boost::asio::ssl::context>(boost::asio::ssl::context::sslv23);
 
     try {
@@ -42,26 +43,26 @@ public:
     typedef websocketpp::lib::shared_ptr<connection_metadata> ptr;
 
     connection_metadata(int id, websocketpp::connection_hdl hdl, std::string uri)
-            : m_id(id), m_hdl(hdl), m_status("Connecting"), m_uri(uri), m_server("N/A") {}
+            : m_id(id), m_hdl(std::move(hdl)), m_status("Connecting"), m_uri(std::move(uri)), m_server("N/A") {}
 
     void on_open(client *c, websocketpp::connection_hdl hdl) {
         m_status = "Open";
 
-        client::connection_ptr con = c->get_con_from_hdl(hdl);
+        client::connection_ptr con = c->get_con_from_hdl(std::move(hdl));
         m_server = con->get_response_header("Server");
     }
 
     void on_fail(client *c, websocketpp::connection_hdl hdl) {
         m_status = "Failed";
 
-        client::connection_ptr con = c->get_con_from_hdl(hdl);
+        client::connection_ptr con = c->get_con_from_hdl(std::move(hdl));
         m_server = con->get_response_header("Server");
         m_error_reason = con->get_ec().message();
     }
 
     void on_close(client *c, websocketpp::connection_hdl hdl) {
         m_status = "Closed";
-        client::connection_ptr con = c->get_con_from_hdl(hdl);
+        client::connection_ptr con = c->get_con_from_hdl(std::move(hdl));
         std::stringstream s;
         s << "close code: " << con->get_remote_close_code() << " ("
           << websocketpp::close::status::get_string(con->get_remote_close_code())
@@ -69,7 +70,7 @@ public:
         m_error_reason = s.str();
     }
 
-    void on_message(websocketpp::connection_hdl, client::message_ptr msg) {
+    void on_message(const websocketpp::connection_hdl &, const client::message_ptr &msg) {
         if (msg->get_opcode() == websocketpp::frame::opcode::text) {
             m_messages.push_back("<< " + getTimeStamps() + msg->get_payload());
         } else {
@@ -98,7 +99,7 @@ public:
         return std::vector<std::string>{m_messages};
     }
 
-    void record_sent_message(std::string message) {
+    void record_sent_message(const std::string &message) {
         m_messages.push_back(">> " + getTimeStamps() + message);
     }
 
@@ -148,18 +149,18 @@ public:
     ~websocket_endpoint() {
         m_endpoint.stop_perpetual();
 
-        for (con_list::const_iterator it = m_connection_list.begin(); it != m_connection_list.end(); ++it) {
-            if (it->second->get_status() != "Open") {
+        for (const auto &it : m_connection_map) {
+            if (it.second->get_status() != "Open") {
                 // Only close open connections
                 continue;
             }
 
-            std::cout << "> Closing connection " << it->second->get_id() << std::endl;
+            std::cout << "> Closing connection " << it.second->get_id() << std::endl;
 
             websocketpp::lib::error_code ec;
-            m_endpoint.close(it->second->get_hdl(), websocketpp::close::status::going_away, "", ec);
+            m_endpoint.close(it.second->get_hdl(), websocketpp::close::status::going_away, "", ec);
             if (ec) {
-                std::cout << "> Error closing connection " << it->second->get_id() << ": "
+                std::cout << "> Error closing connection " << it.second->get_id() << ": "
                           << ec.message() << std::endl;
             }
         }
@@ -183,7 +184,7 @@ public:
         connection_metadata::ptr metadata_ptr = websocketpp::lib::make_shared<connection_metadata>(new_id,
                                                                                                    con->get_handle(),
                                                                                                    uri);
-        m_connection_list[new_id] = metadata_ptr;
+        m_connection_map[new_id] = metadata_ptr;
 
         con->set_open_handler(websocketpp::lib::bind(
                 &connection_metadata::on_open,
@@ -215,11 +216,11 @@ public:
         return new_id;
     }
 
-    void close(int id, websocketpp::close::status::value code, std::string reason) {
+    void close(int id, websocketpp::close::status::value code, const std::string &reason) {
         websocketpp::lib::error_code ec;
 
-        con_list::iterator metadata_it = m_connection_list.find(id);
-        if (metadata_it == m_connection_list.end()) {
+        auto metadata_it = m_connection_map.find(id);
+        if (metadata_it == m_connection_map.end()) {
             std::cout << "> No connection found with id " << id << std::endl;
             return;
         }
@@ -230,11 +231,11 @@ public:
         }
     }
 
-    void send(int id, std::string message) {
+    void send(int id, const std::string &message) {
         websocketpp::lib::error_code ec;
 
-        con_list::iterator metadata_it = m_connection_list.find(id);
-        if (metadata_it == m_connection_list.end()) {
+        auto metadata_it = m_connection_map.find(id);
+        if (metadata_it == m_connection_map.end()) {
             std::cout << "> No connection found with id " << id << std::endl;
             return;
         }
@@ -249,8 +250,8 @@ public:
     }
 
     connection_metadata::ptr get_metadata(int id) const {
-        con_list::const_iterator metadata_it = m_connection_list.find(id);
-        if (metadata_it == m_connection_list.end()) {
+        auto metadata_it = m_connection_map.find(id);
+        if (metadata_it == m_connection_map.end()) {
             return connection_metadata::ptr();
         } else {
             return metadata_it->second;
@@ -258,12 +259,12 @@ public:
     }
 
 private:
-    typedef std::map<int, connection_metadata::ptr> con_list;
+    typedef std::map<int, connection_metadata::ptr> con_id_metadata_map;
 
     client m_endpoint;
     websocketpp::lib::shared_ptr<websocketpp::lib::thread> m_thread;
 
-    con_list m_connection_list;
+    con_id_metadata_map m_connection_map;
     int m_next_id;
 };
 
