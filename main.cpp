@@ -14,10 +14,23 @@ void updateDiff();
 
 int manualOp();
 
-int BTCUSDT_TKR();
+void checkoutConnectId(int cnctId);
+
+int autoOp();
 
 int main() {
-    manualOp();
+    using namespace std;
+
+    printf("0 - manul op;    1 - auto op\n");
+    int choice{};
+    cin >> choice;
+    if (choice == 0) {
+        manualOp();
+    } else if (choice == 1) {
+        autoOp();
+    } else {
+        cout << "illegal choice" << endl;
+    }
     return 0;
 }
 
@@ -186,31 +199,53 @@ int manualOp() {
     return 0;
 }
 
-int BTCUSDT_TKR() {
-    using namespace std;
-    auto diffDelay = testnet::getTimeDelay();
-    DIFF = diffDelay.first;
-
-    websocket_endpoint endpoint;
-    string url{"wss://testnet.binance.vision/ws-api/v3"};
-    auto id = testnet::connect_url(endpoint, url);
-
-    string queryMsg{
-            "{\"id\":\"043a7cf2-bde3-4888-9604-c8ac41fcba4d\",\"method\":\"ticker.price\",\"params\":{\"symbol\":\"BTCUSDT\"}}"};
-    while (true) {
-        Sleep(2000);
-        endpoint.send(id, queryMsg);
-        connection_metadata::ptr metadata = endpoint.get_metadata(id);
-        if (metadata) {
-            auto msgs = (*metadata).getMst();
-            cout << msgs[msgs.size() - 2] << endl;
-            cout << msgs[msgs.size() - 1] << endl;
-            metadata->clearMsg();
-        } else {
-            std::cout << "> Unknown connection id " << id << std::endl;
-            break;
-        }
+void checkoutConnectId(int cnctId) {
+    if (cnctId != -1) {
+        std::cout << "> Created connection with id " << cnctId << std::endl;
+    } else {
+        std::cout << "> Failed to connect the price net " << cnctId << std::endl;
+        exit(0);
     }
+}
+
+int autoOp() {
+    using namespace std;
+    cfg::refreshConfig();
+    updateDiff();
+
+    websocket_endpoint endpoint_stk;
+    websocket_endpoint endpoint_ftk;
+    websocket_endpoint endpoint_std;
+    websocket_endpoint endpoint_ftd;
+
+    int endpoint_stk_id = endpoint_stk.connect(cfg::future_url);
+    checkoutConnectId(endpoint_stk_id);
+    int endpoint_ftk_id = endpoint_ftk.connect(cfg::future_url);
+    checkoutConnectId(endpoint_ftk_id);
+    int endpoint_std_id = endpoint_std.connect(cfg::testnet_url);
+    checkoutConnectId(endpoint_std_id);
+    /* no related api of ws */
+    /*int endpoint_ftd_id = endpoint_ftd.connect(cfg::testnet_url);
+    checkoutConnectId(endpoint_ftd_id);*/
+
+    std::string message = std::move(getTicker(false));
+    endpoint_stk.send(endpoint_stk_id, message);
+
+    message = std::move(getTicker());
+    endpoint_ftk.send(endpoint_ftk_id, message);
+
+    std::string price{};
+    message = std::move(getTradeMsgFromConfig(false, price, DIFF));
+    message = std::move(getTradeMsgFromConfig(true, price, DIFF));
+    endpoint_std.send(endpoint_std_id, message);
+    /*endpoint_ftd.send(endpoint_std_id, message);*/
+
+    int close_code = websocketpp::close::status::normal;
+    std::string reason{};
+    endpoint_stk.close(endpoint_stk_id, close_code, reason);
+    endpoint_ftk.close(endpoint_ftk_id, close_code, reason);
+    endpoint_std.close(endpoint_std_id, close_code, reason);
+    /*endpoint_ftd.close(endpoint_ftd_id, close_code, reason);*/
 
     return 0;
 }
