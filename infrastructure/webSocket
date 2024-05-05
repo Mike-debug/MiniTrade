@@ -90,6 +90,10 @@ public:
         return m_status;
     }
 
+    std::string get_url() const {
+        return m_uri;
+    }
+
     std::vector<std::string> getMst() const {
         return std::vector<std::string>{m_messages};
     }

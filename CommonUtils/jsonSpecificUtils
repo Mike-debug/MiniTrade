@@ -30,111 +30,6 @@ static std::string getAdjustedTimeStamp(long long diff = 0LL) {
 
 }
 
-void replaceAll(std::string &str, const std::string &oldStr, const std::string &newStr) {
-    size_t pos = 0;
-    while ((pos = str.find(oldStr, pos)) != std::string::npos) {
-        str.replace(pos, oldStr.length(), newStr);
-        pos += newStr.length();
-    }
-}
-
-template<typename K, typename V>
-std::string convertMap2String(const std::map<K, V> m) {
-    std::stringstream ss{};
-    ss << "{";
-
-    auto lastIterator = m.end();
-    --lastIterator;
-
-    for (auto mt = m.begin(); mt != lastIterator; ++mt) {
-        ss << "\"" << mt->first << "\": \"" << mt->second << "\",";
-    }
-    ss << "\"" << lastIterator->first << "\": \"" << lastIterator->second << "\"";
-
-    ss << "}";
-    auto ansStr = ss.str();
-    replaceAll(ansStr, "\"{", "{");
-    replaceAll(ansStr, "}\"", "}");
-    return ansStr;
-}
-
-std::string getStringFromMapPayLoadString(const std::map<std::string, std::string> &paramMap) {
-    std::string payLoad{};
-    for (const auto &pair : paramMap) {
-        payLoad += pair.first + "=" + pair.second + "&";
-    }
-    // 检查字符串是否为空
-    if (!payLoad.empty()) {
-        // 删除最后一个字符
-        payLoad.erase(payLoad.size() - 1);
-    }
-    return payLoad;
-}
-
-std::map<std::string, std::string> getTradeExampleParamMap(bool sell = true) {
-    std::map<std::string, std::string> paramMap{
-            {"apiKey",           cfg::public_key},
-            {"newOrderRespType", "ACK"},
-            {"price",            sell ? cfg::sellPrice : cfg::buyPrice},
-            {"quantity",         "0.01000000"},
-            {"recvWindow",       "1000"},
-            {"side",             sell ? "SELL" : "BUY"},
-            {"symbol",           "BTCUSDT"},
-            {"timeInForce",      "GTC"},
-            {"timestamp",        getAdjustedTimeStamp(DIFF)},
-            {"type",             "LIMIT"}
-    };
-
-    auto payLoad = getStringFromMapPayLoadString(paramMap);
-    std::cout << payLoad << std::endl;
-
-    auto signature = calculateHMAC(payLoad, cfg::private_key);
-    paramMap.insert({"signature", signature});
-    return paramMap;
-}
-
-std::map<std::string, std::string> getCancelTradeExampleParamMap(const std::string &orderId) {
-    std::map<std::string, std::string> paramMap{
-            {"symbol",            "BTCUSDT"},
-            {"origClientOrderId", orderId},
-            {"apiKey",            cfg::public_key},
-            {"timestamp",         getAdjustedTimeStamp(DIFF)}
-    };
-
-    auto payLoad = getStringFromMapPayLoadString(paramMap);
-    std::cout << payLoad << std::endl;
-
-    auto signature = calculateHMAC(payLoad, cfg::private_key);
-    paramMap.insert({"signature", signature});
-    return paramMap;
-}
-
-std::map<std::string, std::string> getTradeExampleMap(bool sell = true) {
-    std::map<std::string, std::string> TradeExampleMap{
-            {"id",     getAdjustedTimeStamp(DIFF)},
-            {"method", "order.place"},
-            {"params", convertMap2String(getTradeExampleParamMap(sell))},
-    };
-    return TradeExampleMap;
-}
-
-std::map<std::string, std::string> getCancelTradeExampleMap(const std::string &orderId) {
-    std::map<std::string, std::string> TradeExampleMap{
-            {"id",     getAdjustedTimeStamp(DIFF)},
-            {"method", "order.cancel"},
-            {"params", convertMap2String(getCancelTradeExampleParamMap(orderId))},
-    };
-    return TradeExampleMap;
-}
-
-std::string getTradeMsgExample(bool sell = true) {
-    return convertMap2String(getTradeExampleMap(sell));
-}
-
-std::string getCancelMsgExample(const std::string &orderId) {
-    return convertMap2String(getCancelTradeExampleMap(orderId));
-}
-
 std::string makePayLoad(const Json::Value &jsonObj) {
     // 获取 JSON 对象中的所有键
     std::vector<std::string> keys = jsonObj.getMemberNames();
@@ -152,6 +47,15 @@ std::string makePayLoad(const Json::Value &jsonObj) {
     return retPayLoad;
 }
 
+std::string jsonObj2StringWithoutBlank(const Json::Value &jsonObj) {
+    // 构建 JSON 写入器，并设置缩进为空字符串
+    static Json::StreamWriterBuilder builder{};
+    builder["indentation"] = ""; // 禁用缩进
+    // 将 JSON 对象转换为字符串
+    std::string jsonString = Json::writeString(builder, jsonObj);
+    return jsonString;
+}
+
 std::string getCancelMsgFromConfig(const std::string &orderId, long long diff = 0LL) {
     auto request = cfg::cancelRequest;
     auto timsStamp = getAdjustedTimeStamp(diff);
@@ -160,11 +64,7 @@ std::string getCancelMsgFromConfig(const std::string &orderId, long long diff = 
     request["params"]["origClientOrderId"] = orderId;
     auto payLoad = makePayLoad(request["params"]);
     request["params"]["signature"] = calculateHMAC(payLoad, cfg::private_key);
-    // 构建 JSON 写入器，并设置缩进为空字符串
-    Json::StreamWriterBuilder builder;
-    builder["indentation"] = ""; // 禁用缩进
-    // 将 JSON 对象转换为字符串
-    std::string jsonString = Json::writeString(builder, request);
+    auto jsonString = jsonObj2StringWithoutBlank(request);
     if (cfg::ifLog) {
         std::cout << "getCancelMsgFromConfig:" << std::endl;
         std::cout << jsonString << std::endl;
@@ -194,13 +94,19 @@ std::string getTradeMsgFromConfig(bool sell = true, const std::string &price = "
     }
     auto payLoad = makePayLoad(request["params"]);
     request["params"]["signature"] = calculateHMAC(payLoad, cfg::private_key);
-    // 构建 JSON 写入器，并设置缩进为空字符串
-    Json::StreamWriterBuilder builder;
-    builder["indentation"] = ""; // 禁用缩进
-    // 将 JSON 对象转换为字符串
-    std::string jsonString = Json::writeString(builder, request);
+    auto jsonString = jsonObj2StringWithoutBlank(request);
     if (cfg::ifLog) {
         std::cout << "getTradeMsgFromConfig:" << std::endl;
+        std::cout << jsonString << std::endl;
+    }
+    return jsonString;
+}
+
+std::string getTicker(bool ifFuture = true) {
+    auto request = ifFuture ? cfg::subscribeFutureRequest : cfg::subscribeSpotRequest;
+    auto jsonString = jsonObj2StringWithoutBlank(request);
+    if (cfg::ifLog) {
+        std::cout << "getTicker:" << std::endl;
         std::cout << jsonString << std::endl;
     }
     return jsonString;

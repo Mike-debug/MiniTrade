@@ -20,13 +20,14 @@ namespace cfg {
     std::string public_key{};
     std::string private_key{};
     std::string testnet_url{};
+    std::string future_url{};
 
     Json::Value tradeRequest{};
     Json::Value cancelRequest{};
     Json::Value ticker{};
     Json::Value subscribeFutureRequest{};
     Json::Value subscribeFutureResponse{};
-    Json::Value subscribeSpot{};
+    Json::Value subscribeSpotRequest{};
     Json::Value subscribeSpotResponse{};
 
     bool refreshConfig();
@@ -78,6 +79,9 @@ bool cfg::refreshConfig() {
     if (jsonObject.isMember("testnet_url")) {
         testnet_url = jsonObject["testnet_url"].asString();
     }
+    if (jsonObject.isMember("future_url")) {
+        future_url = jsonObject["future_url"].asString();
+    }
 
     if (jsonObject.isMember("tradeRequest")) { tradeRequest = jsonObject["tradeRequest"]; }
     if (jsonObject.isMember("cancelRequest")) { cancelRequest = jsonObject["cancelRequest"]; }
@@ -86,7 +90,7 @@ bool cfg::refreshConfig() {
             "subscribeFutureRequest")) { subscribeFutureRequest = jsonObject["subscribeFutureRequest"]; }
     if (jsonObject.isMember(
             "subscribeFutureResponse")) { subscribeFutureResponse = jsonObject["subscribeFutureResponse"]; }
-    if (jsonObject.isMember("subscribeSpot")) { subscribeSpot = jsonObject["subscribeSpot"]; }
+    if (jsonObject.isMember("subscribeSpotRequest")) { subscribeSpotRequest = jsonObject["subscribeSpotRequest"]; }
     if (jsonObject.isMember("subscribeSpotResponse")) { subscribeSpotResponse = jsonObject["subscribeSpotResponse"]; }
 
 
@@ -100,12 +104,13 @@ bool cfg::printConfig() {
     std::cout << "api_key: " << public_key << std::endl;
     std::cout << "private_key: " << private_key << std::endl;
     std::cout << "testnet_url: " << testnet_url << std::endl;
+    std::cout << "future_url: " << future_url << std::endl;
     std::cout << "tradeRequest: " << tradeRequest << std::endl;
     std::cout << "cancelRequest: " << cancelRequest << std::endl;
     std::cout << "ticker: " << ticker << std::endl;
     std::cout << "subscribeFutureRequest: " << subscribeFutureRequest << std::endl;
     std::cout << "subscribeFutureResponse: " << subscribeFutureResponse << std::endl;
-    std::cout << "subscribeSpot: " << subscribeSpot << std::endl;
+    std::cout << "subscribeSpotRequest: " << subscribeSpotRequest << std::endl;
     std::cout << "subscribeSpotResponse: " << subscribeSpotResponse << std::endl;
     return true;
 }

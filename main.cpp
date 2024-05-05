@@ -60,21 +60,48 @@ int manualOp() {
                     << "help: Display this help text\n"
                     << "quit: Exit the program\n"
                     << std::endl;
-        } else if (input.substr(0, 7) == "connect") {
+        } else if (input == "connect") {
+            int id = endpoint.connect(cfg::testnet_url);
+            if (id != -1) {
+                std::cout << "> Created connection with id " << id << std::endl;
+            }
+        } else if (input == "connectf") {
+            int id = endpoint.connect(cfg::future_url);
+            if (id != -1) {
+                std::cout << "> Created connection with id " << id << std::endl;
+            }
+        } else if (input != "connect" && input.substr(0, 7) == "connect") {
             int id = endpoint.connect(input.substr(8));
             if (id != -1) {
                 std::cout << "> Created connection with id " << id << std::endl;
             }
-        } else if (input.substr(0, 4) == "send") {
+        } else if (input.substr(0, 9) == "spotprice") {
             std::stringstream ss(input);
 
             std::string cmd;
             int id;
-            std::string message;
 
             ss >> cmd >> id;
-            std::getline(ss, message);
 
+            if (endpoint.get_metadata(id)->get_url() != cfg::future_url) {
+                std::cout << "on a wrong connection" << std::endl;
+                continue;
+            }
+            std::string message = std::move(getTicker(false));
+            endpoint.send(id, message);
+        } else if (input.substr(0, 11) == "futureprice") {
+            std::stringstream ss(input);
+
+            std::string cmd;
+            int id;
+
+            ss >> cmd >> id;
+
+            if (endpoint.get_metadata(id)->get_url() != cfg::future_url) {
+                std::cout << "on a wrong connection" << std::endl;
+                continue;
+            }
+            std::string message = std::move(getTicker());
             endpoint.send(id, message);
         } else if (input.substr(0, 4) == "sell") {
             std::stringstream ss(input);
@@ -84,6 +111,11 @@ int manualOp() {
             std::string price;
 
             ss >> cmd >> id >> price;
+            if (endpoint.get_metadata(id)->get_url() != cfg::testnet_url) {
+                std::cout << "on a wrong connection" << std::endl;
+                continue;
+            }
+
             std::string message = std::move(getTradeMsgFromConfig(true, price, DIFF));
 
             endpoint.send(id, message);
@@ -95,6 +127,10 @@ int manualOp() {
             std::string price;
 
             ss >> cmd >> id >> price;
+            if (endpoint.get_metadata(id)->get_url() != cfg::testnet_url) {
+                std::cout << "on a wrong connection" << std::endl;
+                continue;
+            }
             std::string message = std::move(getTradeMsgFromConfig(false, price, DIFF));
 
             endpoint.send(id, message);
@@ -106,6 +142,11 @@ int manualOp() {
             std::string orderId;
 
             ss >> cmd >> id >> orderId;
+            if (endpoint.get_metadata(id)->get_url() != cfg::testnet_url) {
+                std::cout << "on a wrong connection" << std::endl;
+                continue;
+            }
+
             std::string message = std::move(getCancelMsgFromConfig(orderId, DIFF));
             cout << message << endl;
 
