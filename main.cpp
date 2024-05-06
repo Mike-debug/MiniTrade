@@ -10,6 +10,8 @@
 #include "infrastructure/webSocket"
 #include "infrastructure/testNet"
 
+long long DIFF{0LL};
+
 void updateDiff();
 
 int manualOp();
@@ -70,6 +72,18 @@ int manualOp() {
                     << "send <connection id> <message>\n"
                     << "close <connection id> [<close code:default=1000>] [<close reason>]\n"
                     << "show <connection id>\n"
+
+                    << "connect: connect the default testnet url\n"
+                    << "connectf: connect the default future url\n"
+                    << "spotprice <connection id>: set connection to spy spot price\n"
+                    << "futureprice <connection id>: set connection to spy future price\n"
+                    << "sell <connection id> <price>: sell at one price one connection\n"
+                    << "buy <connection id> <price>: buy at one price one connection\n"
+                    << "cancel <connection id> <order id>: cancel order on the connection\n"
+                    << "refreshConfig:\n"
+                    << "showConfig:\n"
+                    << "updateDiff: update net delay and system time diff\n"
+
                     << "help: Display this help text\n"
                     << "quit: Exit the program\n"
                     << std::endl;
@@ -88,7 +102,7 @@ int manualOp() {
             if (id != -1) {
                 std::cout << "> Created connection with id " << id << std::endl;
             }
-        } else if (input.substr(0, 9) == "spotprice") {
+        } else if (input != "spotprice" && input.substr(0, 9) == "spotprice") {
             std::stringstream ss(input);
 
             std::string cmd;
@@ -102,7 +116,7 @@ int manualOp() {
             }
             std::string message = std::move(getTicker(false));
             endpoint.send(id, message);
-        } else if (input.substr(0, 11) == "futureprice") {
+        } else if (input != "futureprice" && input.substr(0, 11) == "futureprice") {
             std::stringstream ss(input);
 
             std::string cmd;
@@ -116,7 +130,7 @@ int manualOp() {
             }
             std::string message = std::move(getTicker());
             endpoint.send(id, message);
-        } else if (input.substr(0, 4) == "sell") {
+        } else if (input != "sell" && input.substr(0, 4) == "sell") {
             std::stringstream ss(input);
 
             std::string cmd;
@@ -132,7 +146,7 @@ int manualOp() {
             std::string message = std::move(getTradeMsgFromConfig(true, price, DIFF));
 
             endpoint.send(id, message);
-        } else if (input.substr(0, 3) == "buy") {
+        } else if (input != "buy" && input.substr(0, 3) == "buy") {
             std::stringstream ss(input);
 
             std::string cmd;
@@ -147,7 +161,7 @@ int manualOp() {
             std::string message = std::move(getTradeMsgFromConfig(false, price, DIFF));
 
             endpoint.send(id, message);
-        } else if (input.substr(0, 6) == "cancel") {
+        } else if (input != "cancel" && input.substr(0, 6) == "cancel") {
             std::stringstream ss(input);
 
             std::string cmd;
@@ -228,18 +242,56 @@ int autoOp() {
     /*int endpoint_ftd_id = endpoint_ftd.connect(cfg::testnet_url);
     checkoutConnectId(endpoint_ftd_id);*/
 
+    std::this_thread::sleep_for(std::chrono::seconds(3));
     std::string message = std::move(getTicker(false));
     endpoint_stk.send(endpoint_stk_id, message);
+    endpoint_stk.get_metadata(endpoint_stk_id)->setNotifier();
 
     message = std::move(getTicker());
     endpoint_ftk.send(endpoint_ftk_id, message);
 
-    std::string price{};
-    message = std::move(getTradeMsgFromConfig(false, price, DIFF));
-    message = std::move(getTradeMsgFromConfig(true, price, DIFF));
-    endpoint_std.send(endpoint_std_id, message);
-    /*endpoint_ftd.send(endpoint_std_id, message);*/
+    for (unsigned int i{1}; i <= cfg::autoTradeNum;) {
+        std::unique_lock<std::mutex> lock(m_mutex);
+        while (!ready1) { cv.wait(lock); }
+        ready1 = false;
 
+        auto stkPirceTime = endpoint_stk.get_metadata(endpoint_stk_id)->getTicker();
+        auto ftkPirceTime = endpoint_ftk.get_metadata(endpoint_ftk_id)->getTicker();
+
+        if (std::abs(static_cast<long long>(stkPirceTime.second)
+                     - static_cast<long long>(ftkPirceTime.second))
+            <
+            cfg::diffTickerTime) {
+            std::string buyPrice{};
+            std::string sellPrice{};
+
+            bool buySpot = std::stod(stkPirceTime.first) < std::stod(ftkPirceTime.first);
+            if (buySpot) {
+                buyPrice = stkPirceTime.first;
+                sellPrice = ftkPirceTime.first;
+            } else {
+                buyPrice = ftkPirceTime.first;
+                sellPrice = stkPirceTime.first;
+            }
+
+            std::string buyMessage = std::move(getTradeMsgFromConfig(false, buyPrice, DIFF));
+            std::string sellMessage = std::move(getTradeMsgFromConfig(true, sellPrice, DIFF));
+
+            if (buySpot) {
+                endpoint_std.send(endpoint_std_id, buyMessage);
+                /*endpoint_ftd.send(endpoint_std_id, sellMessage);*/
+            } else {
+                endpoint_std.send(endpoint_std_id, sellMessage);
+                /*endpoint_ftd.send(endpoint_std_id, buyMessage);*/
+            }
+
+            cout << i++ << " th auto trade:" << endl;
+            if (buySpot) { cout << "buy Spot sell future" << endl; }
+            else { cout << "sell Spot buy future" << endl; }
+            cout << buyMessage << endl;
+            cout << sellMessage << endl;
+        }
+    }
     int close_code = websocketpp::close::status::normal;
     std::string reason{};
     endpoint_stk.close(endpoint_stk_id, close_code, reason);

@@ -19,7 +19,7 @@
 
 #include "infrastructure/webSocket"
 
-#include "CommonUtils/jsonSpecificUtils"
+#include "config/jsonSpecificUtils"
 #include "commonUtils.h"
 
 namespace testnet {

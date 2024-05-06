@@ -20,7 +20,8 @@ set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};C:/Users/Mike_Wei/program/vcpkg/pack
 find_package(jsoncpp CONFIG 1.9.5 REQUIRED)
 
 
-set(LIB_DIR C:/Users/Mike_Wei/CLionProjects/boost_1_85_0/stage/lib)
+set(BOOST_LIB_DIR C:/Users/Mike_Wei/CLionProjects/boost_1_85_0/stage/lib)
+set(COMMON_UTILS_LIB_DIR C:/Users/Mike_Wei/CLionProjects/MiniTrade/CommonUtils/build/Release)
 
 #[[----------------------------------------include and link rules----------------------------------------]]
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -29,7 +30,9 @@ target_include_directories(${PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
         )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${LIB_DIR}/libboost_random-vc143-mt-x64-1_85.lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${BOOST_LIB_DIR}/libboost_random-vc143-mt-x64-1_85.lib)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE ${COMMON_UTILS_LIB_DIR}/CommonUtils.lib)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE OpenSSL::SSL OpenSSL::Crypto)
 

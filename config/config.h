@@ -14,6 +14,9 @@ const std::string CONFIG_PATH{R"(C:\Users\Mike_Wei\CLionProjects\MiniTrade\confi
 
 namespace cfg {
     bool ifLog = true;
+    unsigned int autoTradeNum = 2;
+    unsigned long long diffTickerTime = 1000;
+
     std::string sellPrice{};
     std::string buyPrice{};
 
@@ -59,9 +62,16 @@ bool cfg::refreshConfig() {
     }
     std::cout << "Config:\n" << jsonObject << std::endl;
 
-    // 获取 JSON 对象中的特定字段的值
     if (jsonObject.isMember("ifLog")) {
         ifLog = jsonObject["ifLog"].asBool();
+    }
+
+    if (jsonObject.isMember("autoTradeNum")) {
+        autoTradeNum = jsonObject["autoTradeNum"].asUInt();
+    }
+
+    if (jsonObject.isMember("diffTickerTime")) {
+        diffTickerTime = jsonObject["diffTickerTime"].asUInt64();
     }
 
     if (jsonObject.isMember("sellPrice")) {
@@ -99,6 +109,8 @@ bool cfg::refreshConfig() {
 
 bool cfg::printConfig() {
     std::cout << "ifLog: " << ifLog << std::endl;
+    std::cout << "autoTradeNum: " << autoTradeNum << std::endl;
+    std::cout << "diffTickerTime: " << diffTickerTime << std::endl;
     std::cout << "sellPrice: " << sellPrice << std::endl;
     std::cout << "buyPrice: " << buyPrice << std::endl;
     std::cout << "api_key: " << public_key << std::endl;

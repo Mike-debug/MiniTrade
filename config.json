@@ -1,5 +1,7 @@
 {
-  "ifLog": true,
+  "ifLog": false,
+  "autoTradeNum": 10,
+  "diffTickerTime": 1000,
 
   "sellPrice": "70000.00",
   "buyPrice": "60001.00",
