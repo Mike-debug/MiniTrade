@@ -10,7 +10,7 @@
 #include <iostream>
 #include <json/json.h>
 
-const std::string CONFIG_PATH{R"(.\config.json)"};
+const std::string CONFIG_PATH{R"(..\config.json)"};
 
 namespace cfg {
     bool ifLog = true;
