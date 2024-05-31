@@ -9,7 +9,7 @@ add_library(${PROJECT_NAME} generateSignature.cpp getTimeStamp.cpp)
 include_directories("./")
 set(CMAKE_MODULE_PATH
         ${CMAKE_MODULE_PATH}
-        "C:/Users/Mike_Wei/program/vcpkg/downloads/tools/cmake-3.24.0-windows/cmake-3.24.0-windows-i386/share/cmake-3.24/Modules/FindOpenSSL.cmake")
+        "C:/Users/Mike_Wei/program/vcpkg-2024.04.26/downloads/tools/cmake-3.29.2-windows/cmake-3.29.2-windows-i386/share/cmake-3.29/Modules/FindOpenSSL.cmake")
 find_package(OpenSSL REQUIRED)
 
 #[[----------------------------------------include and link rules----------------------------------------]]

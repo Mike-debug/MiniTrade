@@ -2,7 +2,7 @@
 // Created by Mike_Wei on 5/3/2024.
 //
 
-#include "generateSignature"
+#include <CommonUtils/generateSignature>
 
 std::string calculateHMAC(const std::string &message, const std::string &key) {
     unsigned char digest[EVP_MAX_MD_SIZE];
