@@ -32,6 +32,11 @@ namespace cfg {
     Json::Value subscribeFutureResponse{};
     Json::Value subscribeSpotRequest{};
     Json::Value subscribeSpotResponse{};
+    Json::Value allOrdersRequest{};
+    Json::Value allOrdersResponse{};
+    Json::Value accountStatusResquest{};
+    Json::Value accountStatusResponse{};
+    Json::Value exchangeInfoRequest{};
 
     bool refreshConfig();
 
@@ -102,6 +107,11 @@ bool cfg::refreshConfig() {
             "subscribeFutureResponse")) { subscribeFutureResponse = jsonObject["subscribeFutureResponse"]; }
     if (jsonObject.isMember("subscribeSpotRequest")) { subscribeSpotRequest = jsonObject["subscribeSpotRequest"]; }
     if (jsonObject.isMember("subscribeSpotResponse")) { subscribeSpotResponse = jsonObject["subscribeSpotResponse"]; }
+    if (jsonObject.isMember("allOrdersRequest")) { allOrdersRequest = jsonObject["allOrdersRequest"]; }
+    if (jsonObject.isMember("allOrdersResponse")) { allOrdersResponse = jsonObject["allOrdersResponse"]; }
+    if (jsonObject.isMember("accountStatusResquest")) { accountStatusResquest = jsonObject["accountStatusResquest"]; }
+    if (jsonObject.isMember("accountStatusResponse")) { accountStatusResponse = jsonObject["accountStatusResponse"]; }
+    if (jsonObject.isMember("exchangeInfoRequest")) { exchangeInfoRequest = jsonObject["exchangeInfoRequest"]; }
 
 
     return true;
@@ -124,6 +134,11 @@ bool cfg::printConfig() {
     std::cout << "subscribeFutureResponse: " << subscribeFutureResponse << std::endl;
     std::cout << "subscribeSpotRequest: " << subscribeSpotRequest << std::endl;
     std::cout << "subscribeSpotResponse: " << subscribeSpotResponse << std::endl;
+    std::cout << "allOrdersRequest: " << allOrdersRequest << std::endl;
+    std::cout << "allOrdersResponse: " << allOrdersResponse << std::endl;
+    std::cout << "accountStatusResquest: " << accountStatusResquest << std::endl;
+    std::cout << "accountStatusResponse: " << accountStatusResponse << std::endl;
+    std::cout << "exchangeInfoRequest: " << exchangeInfoRequest << std::endl;
     return true;
 }
 
