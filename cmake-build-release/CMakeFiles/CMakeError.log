@@ -1,0 +1,71 @@
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-release/CMakeFiles/CMakeTmp
+
+Run Build Command(s):nmake -f Makefile /nologo cmTC_59c3b\fast && 	"C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.39.33519\bin\HostX86\x64\nmake.exe"  -f CMakeFiles\cmTC_59c3b.dir\build.make /nologo -L                  CMakeFiles\cmTC_59c3b.dir\build
+Building C object CMakeFiles/cmTC_59c3b.dir/src.c.obj
+	C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -E cmake_cl_compile_depends --dep-file=CMakeFiles\cmTC_59c3b.dir\src.c.obj.d --working-dir=C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-release\CMakeFiles\CMakeTmp --filter-prefix="注意: 包含文件:  " -- C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1439~1.335\bin\Hostx86\x64\cl.exe @C:\Users\Mike_Wei\AppData\Local\Temp\nmF17B.tmp
+src.c
+C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-release\CMakeFiles\CMakeTmp\src.c(1): fatal error C1083: 无法打开包括文件: “pthread.h”: No such file or directory
+NMAKE : fatal error U1077: �C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -E cmake_cl_compile_depends --dep-file=CMakeFiles\cmTC_59c3b.dir\src.c.obj.d --working-dir=C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-release\CMakeFiles\CMakeTmp --filter-prefix="注意: 包含文件:  " -- C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1439~1.335\bin\Hostx86\x64\cl.exe @C:\Users\Mike_Wei\AppData\Local\Temp\nmF17B.tmp�: 
+Stop.
+NMAKE : fatal error U1077: �"C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.39.33519\bin\HostX86\x64\nmake.exe"  -f CMakeFiles\cmTC_59c3b.dir\build.make /nologo -L                  CMakeFiles\cmTC_59c3b.dir\build�: 
+Stop.
+
+
+Source file was:
+#include <pthread.h>
+
+static void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_cancel(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-release/CMakeFiles/CMakeTmp
+
+Run Build Command(s):nmake -f Makefile /nologo cmTC_4d4b7\fast && 	"C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.39.33519\bin\HostX86\x64\nmake.exe"  -f CMakeFiles\cmTC_4d4b7.dir\build.make /nologo -L                  CMakeFiles\cmTC_4d4b7.dir\build
+Building C object CMakeFiles/cmTC_4d4b7.dir/CheckFunctionExists.c.obj
+	C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -E cmake_cl_compile_depends --dep-file=CMakeFiles\cmTC_4d4b7.dir\CheckFunctionExists.c.obj.d --working-dir=C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-release\CMakeFiles\CMakeTmp --filter-prefix="注意: 包含文件:  " -- C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1439~1.335\bin\Hostx86\x64\cl.exe @C:\Users\Mike_Wei\AppData\Local\Temp\nmF2A4.tmp
+CheckFunctionExists.c
+Linking C executable cmTC_4d4b7.exe
+	C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -E vs_link_exe --intdir=CMakeFiles\cmTC_4d4b7.dir --rc=C:\WINDOW~1\10\bin\100226~1.0\x86\rc.exe --mt=C:\WINDOW~1\10\bin\100226~1.0\x86\mt.exe --manifests -- C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1439~1.335\bin\Hostx86\x64\link.exe /nologo @CMakeFiles\cmTC_4d4b7.dir\objects1.rsp @C:\Users\Mike_Wei\AppData\Local\Temp\nmF322.tmp
+LINK Pass 1: command "C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1439~1.335\bin\Hostx86\x64\link.exe /nologo @CMakeFiles\cmTC_4d4b7.dir\objects1.rsp /out:cmTC_4d4b7.exe /implib:cmTC_4d4b7.lib /pdb:C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-release\CMakeFiles\CMakeTmp\cmTC_4d4b7.pdb /version:0.0 /machine:x64 /debug /INCREMENTAL /subsystem:console pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTFILE:CMakeFiles\cmTC_4d4b7.dir/intermediate.manifest CMakeFiles\cmTC_4d4b7.dir/manifest.res" failed (exit code 1104) with the following output:
+LINK : fatal error LNK1104: 无法打开文件“pthreads.lib”
+NMAKE : fatal error U1077: �C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -E vs_link_exe --intdir=CMakeFiles\cmTC_4d4b7.dir --rc=C:\WINDOW~1\10\bin\100226~1.0\x86\rc.exe --mt=C:\WINDOW~1\10\bin\100226~1.0\x86\mt.exe --manifests -- C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1439~1.335\bin\Hostx86\x64\link.exe /nologo @CMakeFiles\cmTC_4d4b7.dir\objects1.rsp @C:\Users\Mike_Wei\AppData\Local\Temp\nmF322.tmp�: 
+Stop.
+NMAKE : fatal error U1077: �"C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.39.33519\bin\HostX86\x64\nmake.exe"  -f CMakeFiles\cmTC_4d4b7.dir\build.make /nologo -L                  CMakeFiles\cmTC_4d4b7.dir\build�: 
+Stop.
+
+
+
+Determining if the function pthread_create exists in the pthread failed with the following output:
+Change Dir: C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-release/CMakeFiles/CMakeTmp
+
+Run Build Command(s):nmake -f Makefile /nologo cmTC_553ef\fast && 	"C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.39.33519\bin\HostX86\x64\nmake.exe"  -f CMakeFiles\cmTC_553ef.dir\build.make /nologo -L                  CMakeFiles\cmTC_553ef.dir\build
+Building C object CMakeFiles/cmTC_553ef.dir/CheckFunctionExists.c.obj
+	C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -E cmake_cl_compile_depends --dep-file=CMakeFiles\cmTC_553ef.dir\CheckFunctionExists.c.obj.d --working-dir=C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-release\CMakeFiles\CMakeTmp --filter-prefix="注意: 包含文件:  " -- C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1439~1.335\bin\Hostx86\x64\cl.exe @C:\Users\Mike_Wei\AppData\Local\Temp\nmF44A.tmp
+CheckFunctionExists.c
+Linking C executable cmTC_553ef.exe
+	C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -E vs_link_exe --intdir=CMakeFiles\cmTC_553ef.dir --rc=C:\WINDOW~1\10\bin\100226~1.0\x86\rc.exe --mt=C:\WINDOW~1\10\bin\100226~1.0\x86\mt.exe --manifests -- C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1439~1.335\bin\Hostx86\x64\link.exe /nologo @CMakeFiles\cmTC_553ef.dir\objects1.rsp @C:\Users\Mike_Wei\AppData\Local\Temp\nmF4C8.tmp
+LINK Pass 1: command "C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1439~1.335\bin\Hostx86\x64\link.exe /nologo @CMakeFiles\cmTC_553ef.dir\objects1.rsp /out:cmTC_553ef.exe /implib:cmTC_553ef.lib /pdb:C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-release\CMakeFiles\CMakeTmp\cmTC_553ef.pdb /version:0.0 /machine:x64 /debug /INCREMENTAL /subsystem:console pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTFILE:CMakeFiles\cmTC_553ef.dir/intermediate.manifest CMakeFiles\cmTC_553ef.dir/manifest.res" failed (exit code 1104) with the following output:
+LINK : fatal error LNK1104: 无法打开文件“pthread.lib”
+NMAKE : fatal error U1077: �C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -E vs_link_exe --intdir=CMakeFiles\cmTC_553ef.dir --rc=C:\WINDOW~1\10\bin\100226~1.0\x86\rc.exe --mt=C:\WINDOW~1\10\bin\100226~1.0\x86\mt.exe --manifests -- C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1439~1.335\bin\Hostx86\x64\link.exe /nologo @CMakeFiles\cmTC_553ef.dir\objects1.rsp @C:\Users\Mike_Wei\AppData\Local\Temp\nmF4C8.tmp�: 
+Stop.
+NMAKE : fatal error U1077: �"C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.39.33519\bin\HostX86\x64\nmake.exe"  -f CMakeFiles\cmTC_553ef.dir\build.make /nologo -L                  CMakeFiles\cmTC_553ef.dir\build�: 
+Stop.
+
+
+

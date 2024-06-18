@@ -27,7 +27,6 @@ static std::string getAdjustedTimeStamp(long long diff = 0LL) {
         std::cout << "DIFF is " << diff << std::endl;
     }
     return timeStampStr;
-
 }
 
 std::string makePayLoad(const Json::Value &jsonObj) {
@@ -35,7 +34,7 @@ std::string makePayLoad(const Json::Value &jsonObj) {
     std::vector<std::string> keys = jsonObj.getMemberNames();
     std::sort(keys.begin(), keys.end());
     std::string retPayLoad{};
-    for (const auto &k:keys) {
+    for (const auto &k: keys) {
         if (k == "signature") { continue; }
         retPayLoad += k + "=" + jsonObj[k].asString() + "&";
     }
@@ -56,12 +55,17 @@ std::string jsonObj2StringWithoutBlank(const Json::Value &jsonObj) {
     return jsonString;
 }
 
-std::string getCancelMsgFromConfig(const std::string &orderId, long long diff = 0LL) {
+std::string getCancelMsgFromConfig(const std::string &orderId, const std::string &symbol = "BTCUSDT",
+                                   long long diff = 0LL) {
     auto request = cfg::cancelRequest;
     auto timsStamp = getAdjustedTimeStamp(diff);
     request["id"] = timsStamp;
+    if (!symbol.empty()) {
+        request["params"]["symbol"] = symbol;
+    }
     request["params"]["timestamp"] = timsStamp;
     request["params"]["origClientOrderId"] = orderId;
+    request["params"]["apiKey"] = cfg::public_key;
     auto payLoad = makePayLoad(request["params"]);
     request["params"]["signature"] = calculateHMAC(payLoad, cfg::private_key);
     auto jsonString = jsonObj2StringWithoutBlank(request);
@@ -81,10 +85,14 @@ bool isNumeric(const std::string &str) {
     return iss.eof() && !iss.fail();
 }
 
-std::string getTradeMsgFromConfig(bool sell = true, const std::string &price = "-", long long diff = 0LL) {
+std::string getTradeMsgFromConfig(bool sell = true, const std::string &symbol = "", const std::string &price = "-",
+                                  long long diff = 0LL) {
     auto request = cfg::tradeRequest;
     auto timsStamp = getAdjustedTimeStamp(diff);
     request["id"] = timsStamp;
+    if (!symbol.empty()) {
+        request["params"]["symbol"] = symbol;
+    }
     request["params"]["timestamp"] = timsStamp;
     request["params"]["side"] = sell ? "SELL" : "BUY";
     if (!isNumeric(price)) {
@@ -93,10 +101,109 @@ std::string getTradeMsgFromConfig(bool sell = true, const std::string &price = "
         request["params"]["price"] = price;
     }
     auto payLoad = makePayLoad(request["params"]);
+    request["params"]["apiKey"] = cfg::public_key;
     request["params"]["signature"] = calculateHMAC(payLoad, cfg::private_key);
     auto jsonString = jsonObj2StringWithoutBlank(request);
     if (cfg::ifLog) {
         std::cout << "getTradeMsgFromConfig:" << std::endl;
+        std::cout << jsonString << std::endl;
+        std::cout << "payLoad:" << std::endl;
+        std::cout << payLoad << std::endl;
+    }
+    return jsonString;
+}
+
+std::string getTradeFutureMsgFromConfig(bool sell = true, const std::string &symbol = "", const std::string &price = "-",
+                                  long long diff = 0LL) {
+    auto request = cfg::tradeRequest;
+    auto timsStamp = getAdjustedTimeStamp(diff);
+    request["id"] = timsStamp;
+    if (!symbol.empty()) {
+        request["params"]["symbol"] = symbol;
+    }
+    request["params"]["timestamp"] = timsStamp;
+    request["params"]["side"] = sell ? "SELL" : "BUY";
+    if (!isNumeric(price)) {
+        request["params"]["price"] = sell ? cfg::sellPrice : cfg::buyPrice;
+    } else {
+        request["params"]["price"] = price;
+    }
+    request["params"]["apiKey"] = cfg::public_key;
+    auto payLoad = makePayLoad(request["params"]);
+    request["params"]["signature"] = calculateHMAC(payLoad, cfg::private_key);
+    auto jsonString = jsonObj2StringWithoutBlank(request);
+    if (cfg::ifLog) {
+        std::cout << "getTradeFutureMsgFromConfig:" << std::endl;
+        std::cout << jsonString << std::endl;
+        std::cout << "payLoad:" << std::endl;
+        std::cout << payLoad << std::endl;
+    }
+    return jsonString;
+}
+
+std::string getAllOrdersMsgFromConfig(
+    const std::string &symbol = "",
+    const std::string &startTime = "",
+    const std::string &endTime = "",
+    const std::string &limit = "",
+    long long diff = 0LL
+) {
+    auto request = cfg::allOrdersRequest;
+    auto timsStamp = getAdjustedTimeStamp(diff);
+    request["id"] = timsStamp;
+    if (!symbol.empty()) {
+        request["params"]["symbol"] = symbol;
+    }
+    if (!endTime.empty()) {
+        request["params"]["endTime"] = endTime;
+    } else {
+        request["params"]["endTime"] = timsStamp;
+    }
+    if (!startTime.empty()) {
+        request["params"]["startTime"] = startTime;
+    } else {
+        auto five_days_ago_timsStamp = getAdjustedTimeStamp((24 * 60 * 60 - 1) * 1000);
+        request["params"]["startTime"] = five_days_ago_timsStamp;
+    }
+
+    if (!limit.empty()) {
+        request["params"]["limit"] = limit;
+    }
+    request["params"]["timestamp"] = timsStamp;
+    request["params"]["apiKey"] = cfg::public_key;
+    auto payLoad = makePayLoad(request["params"]);
+    request["params"]["signature"] = calculateHMAC(payLoad, cfg::private_key);
+    auto jsonString = jsonObj2StringWithoutBlank(request);
+    if (cfg::ifLog) {
+        std::cout << "getAllOrdersMsgFromConfig:" << std::endl;
+        std::cout << jsonString << std::endl;
+    }
+    return jsonString;
+}
+
+std::string getAccountStatusMsgFromConfig(long long diff = 0LL) {
+    auto request = cfg::allOrdersRequest;
+    auto timsStamp = getAdjustedTimeStamp(diff);
+    request["id"] = timsStamp;
+    request["params"]["timestamp"] = timsStamp;
+    request["params"]["apiKey"] = cfg::public_key;
+    auto payLoad = makePayLoad(request["params"]);
+    request["params"]["signature"] = calculateHMAC(payLoad, cfg::private_key);
+    auto jsonString = jsonObj2StringWithoutBlank(request);
+    if (cfg::ifLog) {
+        std::cout << "getAccountStatusMsgFromConfig:" << std::endl;
+        std::cout << jsonString << std::endl;
+    }
+    return jsonString;
+}
+
+std::string getExchangeInfoMsgFromConfig(long long diff = 0LL) {
+    auto request = cfg::exchangeInfoRequest;
+    auto timsStamp = getAdjustedTimeStamp(diff);
+    request["id"] = timsStamp;
+    auto jsonString = jsonObj2StringWithoutBlank(request);
+    if (cfg::ifLog) {
+        std::cout << "getAccountStatusMsgFromConfig:" << std::endl;
         std::cout << jsonString << std::endl;
     }
     return jsonString;
