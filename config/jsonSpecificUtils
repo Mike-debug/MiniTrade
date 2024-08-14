@@ -1,0 +1,54 @@
+//
+// Created by Mike_Wei on 5/4/2024.
+//
+
+#ifndef MINITRADE_JSONSPECIFICUTILS_H
+#define MINITRADE_JSONSPECIFICUTILS_H
+
+#include <cstdio>
+#include <iostream>
+#include <map>
+#include <chrono>
+#include <sstream>
+#include <algorithm>
+#include <openssl/hmac.h>
+#include <openssl/sha.h>
+#include <string>
+#include <iomanip>
+#include "CommonUtils/getTimeStamp"
+#include "CommonUtils/generateSignature"
+#include "config/config.h"
+
+
+static std::string getAdjustedTimeStamp(long long diff = 0LL);
+
+std::string makePayLoad(const Json::Value &jsonObj);
+
+std::string jsonObj2StringWithoutBlank(const Json::Value &jsonObj);
+
+std::string getCancelMsgFromConfig(const std::string &orderId, const std::string &symbol = "BTCUSDT",
+                                   long long diff = 0LL);
+
+bool isNumeric(const std::string &str);
+
+std::string getTradeMsgFromConfig(bool sell = true, const std::string &symbol = "", const std::string &price = "-",
+                                  long long diff = 0LL);
+
+std::string getTradeFutureMsgFromConfig(bool sell = true, const std::string &symbol = "", const std::string &price = "-",
+                                  long long diff = 0LL);
+
+std::string getAllOrdersMsgFromConfig(
+    const std::string &symbol = "",
+    const std::string &startTime = "",
+    const std::string &endTime = "",
+    const std::string &limit = "",
+    long long diff = 0LL
+);
+
+std::string getAccountStatusMsgFromConfig(long long diff = 0LL);
+
+std::string getExchangeInfoMsgFromConfig(long long diff = 0LL);
+
+std::string getTicker(bool ifFuture = true);
+
+#endif //MINITRADE_JSONSPECIFICUTILS_H

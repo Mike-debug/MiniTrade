@@ -1,0 +1,17 @@
+//
+// Created by Mike_Wei on 5/3/2024.
+//
+
+#ifndef WEBSOCKETCLIENT_GENERATESIGNATURE_H
+#define WEBSOCKETCLIENT_GENERATESIGNATURE_H
+
+#include <sstream>
+#include <iostream>
+#include <openssl/hmac.h>
+#include <openssl/sha.h>
+#include <string>
+#include <iomanip>
+
+std::string calculateHMAC(const std::string &message, const std::string &key);
+
+#endif //WEBSOCKETCLIENT_GENERATESIGNATURE_H

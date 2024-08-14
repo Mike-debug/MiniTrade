@@ -1,0 +1,39 @@
+//
+// Created by Mike_Wei on 5/4/2024.
+//
+
+#ifndef MINITRADE_TESTNET_
+#define MINITRADE_TESTNET_
+
+#include <cstdlib>
+#include <iostream>
+#include <map>
+#include <string>
+
+#include <websocketpp/config/asio_no_tls_client.hpp>
+#include <websocketpp/config/asio_client.hpp>
+#include <websocketpp/client.hpp>
+#include <utility>
+
+#include <json/json.h>
+#include "infrastructure/webSocket"
+#include "config/jsonSpecificUtils"
+#include "CommonUtils/commonUtils.h"
+
+namespace testnet {
+    int connect_url(websocket_endpoint &endpoint, std::string &testnet_binance_url);
+
+    void test_ws_connect(websocket_endpoint &endpoint, int connect_id, int testNum);
+
+    int disconnect(websocket_endpoint &endpoint, int connect_id = 0, std::string reason = "");
+
+    std::pair<double, double> calculateTimeDiffDelay(websocket_endpoint &endpoint, int connect_id = 0);
+
+    std::vector<unsigned long long> getTimeStamps(const std::vector<std::string> &msgs, unsigned int msgNum);
+
+    std::pair<double, double> calculateTimeDiffDelaySub(const std::vector<unsigned long long> &timeStamps);
+
+    std::pair<double, double> getTimeDelay();
+}
+
+#endif //MINITRADE_TESTNET_

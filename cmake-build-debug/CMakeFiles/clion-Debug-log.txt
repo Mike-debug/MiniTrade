@@ -1,0 +1,125 @@
+C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2024.1.1/bin/ninja/win/x64/ninja.exe" -DCMAKE_TOOLCHAIN_FILE=C:\\Users\\Mike_Wei\\program\\vcpkg-2024.04.26\\scripts\\buildsystems\\vcpkg.cmake -G Ninja -S C:\Users\Mike_Wei\CLionProjects\minitrade_fix -B C:\Users\Mike_Wei\CLionProjects\minitrade_fix\cmake-build-debug
+CMake Warning at C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1384 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1507 (_Boost_COMPONENT_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:2118 (_Boost_MISSING_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/installed/x64-windows/share/boost/vcpkg-cmake-wrapper.cmake:11 (_find_package)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/scripts/buildsystems/vcpkg.cmake:813 (include)
+  CMakeLists.txt:20 (find_package)
+
+
+CMake Warning at C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1384 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1507 (_Boost_COMPONENT_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:2118 (_Boost_MISSING_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/installed/x64-windows/share/boost/vcpkg-cmake-wrapper.cmake:11 (_find_package)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/scripts/buildsystems/vcpkg.cmake:813 (include)
+  CMakeLists.txt:20 (find_package)
+
+
+CMake Warning at C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1384 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1507 (_Boost_COMPONENT_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:2118 (_Boost_MISSING_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/installed/x64-windows/share/boost/vcpkg-cmake-wrapper.cmake:11 (_find_package)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/scripts/buildsystems/vcpkg.cmake:813 (include)
+  CMakeLists.txt:20 (find_package)
+
+
+CMake Warning at C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1384 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1507 (_Boost_COMPONENT_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:2118 (_Boost_MISSING_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/installed/x64-windows/share/boost/vcpkg-cmake-wrapper.cmake:11 (_find_package)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/scripts/buildsystems/vcpkg.cmake:813 (include)
+  CMakeLists.txt:20 (find_package)
+
+
+CMake Warning at C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1384 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1507 (_Boost_COMPONENT_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:2118 (_Boost_MISSING_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/installed/x64-windows/share/boost/vcpkg-cmake-wrapper.cmake:11 (_find_package)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/scripts/buildsystems/vcpkg.cmake:813 (include)
+  CMakeLists.txt:20 (find_package)
+
+
+CMake Warning at C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1384 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1507 (_Boost_COMPONENT_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:2118 (_Boost_MISSING_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/installed/x64-windows/share/boost/vcpkg-cmake-wrapper.cmake:11 (_find_package)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/scripts/buildsystems/vcpkg.cmake:813 (include)
+  CMakeLists.txt:20 (find_package)
+
+
+CMake Warning at C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1384 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1507 (_Boost_COMPONENT_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:2118 (_Boost_MISSING_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/installed/x64-windows/share/boost/vcpkg-cmake-wrapper.cmake:11 (_find_package)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/scripts/buildsystems/vcpkg.cmake:813 (include)
+  CMakeLists.txt:20 (find_package)
+
+
+CMake Warning at C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1384 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1507 (_Boost_COMPONENT_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:2118 (_Boost_MISSING_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/installed/x64-windows/share/boost/vcpkg-cmake-wrapper.cmake:11 (_find_package)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/scripts/buildsystems/vcpkg.cmake:813 (include)
+  CMakeLists.txt:20 (find_package)
+
+
+CMake Warning at C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1384 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1507 (_Boost_COMPONENT_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:2118 (_Boost_MISSING_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/installed/x64-windows/share/boost/vcpkg-cmake-wrapper.cmake:11 (_find_package)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/scripts/buildsystems/vcpkg.cmake:813 (include)
+  CMakeLists.txt:20 (find_package)
+
+
+CMake Warning at C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1384 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1507 (_Boost_COMPONENT_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:2118 (_Boost_MISSING_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/installed/x64-windows/share/boost/vcpkg-cmake-wrapper.cmake:11 (_find_package)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/scripts/buildsystems/vcpkg.cmake:813 (include)
+  CMakeLists.txt:20 (find_package)
+
+
+CMake Warning at C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1384 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:1507 (_Boost_COMPONENT_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/cmake-3.24.2-windows-x86_64/share/cmake-3.24/Modules/FindBoost.cmake:2118 (_Boost_MISSING_DEPENDENCIES)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/installed/x64-windows/share/boost/vcpkg-cmake-wrapper.cmake:11 (_find_package)
+  C:/Users/Mike_Wei/program/vcpkg-2024.04.26/scripts/buildsystems/vcpkg.cmake:813 (include)
+  CMakeLists.txt:20 (find_package)
+
+
+-- Configuring done
+-- Generating done
+-- Build files have been written to: C:/Users/Mike_Wei/CLionProjects/minitrade_fix/cmake-build-debug

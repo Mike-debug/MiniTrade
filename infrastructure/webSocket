@@ -1,0 +1,295 @@
+//
+// Created by Mike_Wei on 5/4/2024.
+//
+
+#ifndef MINITRADE_WEBSOCKET_H
+#define MINITRADE_WEBSOCKET_H
+
+#include <cstdlib>
+#include <iostream>
+#include <map>
+#include <string>
+#include <sstream>
+#include <utility>
+#include <mutex>
+
+#include <websocketpp/config/asio_no_tls_client.hpp>
+#include <websocketpp/config/asio_client.hpp>
+#include <websocketpp/client.hpp>
+#include <websocketpp/common/thread.hpp>
+#include <websocketpp/common/memory.hpp>
+#include <json/json.h>
+
+#include "CommonUtils/getTimeStamp"
+#include "config/config.h"
+#include "config/Sync.h"
+
+
+typedef websocketpp::client<websocketpp::config::asio_tls_client> client;
+typedef websocketpp::lib::shared_ptr<boost::asio::ssl::context> context_ptr;
+
+context_ptr on_tls_init(const websocketpp::connection_hdl &);
+
+class connection_metadata {
+public:
+    typedef websocketpp::lib::shared_ptr<connection_metadata> ptr;
+
+    connection_metadata(int id, websocketpp::connection_hdl hdl, std::string uri)
+            : m_id(id), m_hdl(std::move(hdl)), m_status("Connecting"), m_uri(std::move(uri)), m_server("N/A") {}
+
+    void on_open(client *c, websocketpp::connection_hdl hdl) {
+        m_status = "Open";
+
+        client::connection_ptr con = c->get_con_from_hdl(std::move(hdl));
+        m_server = con->get_response_header("Server");
+    }
+
+    void on_fail(client *c, websocketpp::connection_hdl hdl) {
+        m_status = "Failed";
+
+        client::connection_ptr con = c->get_con_from_hdl(std::move(hdl));
+        m_server = con->get_response_header("Server");
+        m_error_reason = con->get_ec().message();
+    }
+
+    void on_close(client *c, websocketpp::connection_hdl hdl) {
+        m_status = "Closed";
+        client::connection_ptr con = c->get_con_from_hdl(std::move(hdl));
+        std::stringstream s;
+        s << "close code: " << con->get_remote_close_code() << " ("
+          << websocketpp::close::status::get_string(con->get_remote_close_code())
+          << "), close reason: " << con->get_remote_close_reason();
+        m_error_reason = s.str();
+    }
+
+    void on_message(const websocketpp::connection_hdl &, const client::message_ptr &msg) {
+        auto timeStamp = getTimeStamp();
+        auto timeStampStr = std::to_string(timeStamp) + ": ";
+        if (msg->get_opcode() == websocketpp::frame::opcode::text) {
+            auto payLoad = msg->get_payload();
+            updateSpyPrice(timeStamp, payLoad);
+            m_messages.push_back("<< " + timeStampStr + payLoad);
+        } else {
+            m_messages.push_back("<< " + timeStampStr + websocketpp::utility::to_hex(msg->get_payload()));
+        }
+    }
+
+    websocketpp::connection_hdl get_hdl() const {
+        return m_hdl;
+    }
+
+    int get_id() const {
+        return m_id;
+    }
+
+    std::string get_status() const {
+        return m_status;
+    }
+
+    std::string get_url() const {
+        return m_uri;
+    }
+
+    std::vector<std::string> getMst() const {
+        return std::vector<std::string>{m_messages};
+    }
+
+    void record_sent_message(const std::string &message) {
+        m_messages.push_back(">> " + getTimeStampStr() + message);
+    }
+
+    void clearMsg() {
+        m_messages.clear();
+    }
+
+    friend std::ostream &operator<<(std::ostream &out, connection_metadata const &data);
+
+private:
+    void updateSpyPrice(const unsigned long long timeStamp, const std::string &payLoad) noexcept {
+        static Json::Value jsonObj{};
+        static Json::Reader reader{};
+        try {
+            reader.parse(payLoad, jsonObj);
+            if (jsonObj.isMember("p")) {
+                if (ifNotifier) {
+                    std::unique_lock<std::mutex> m_lock{m_mutex};
+                    ready1 = true;
+                }
+                m_ticker_price = jsonObj["p"].asString();
+                m_ticker_price_time = timeStamp;
+                if (ifNotifier) {
+                    cv.notify_one();
+                }
+            }
+        } catch (...) {
+            if (cfg::ifLog) {
+                printf("payLoad is not in ticker format\n");
+            }
+            return;
+        }
+    }
+
+public:
+    std::pair<std::string, unsigned long long> getTicker() const {
+        return {m_ticker_price, m_ticker_price_time};
+    }
+
+    void setNotifier() {
+        ifNotifier = true;
+    }
+
+    void unSetNotifier() {
+        ifNotifier = false;
+    }
+
+private:
+    int m_id;
+    websocketpp::connection_hdl m_hdl;
+    std::string m_status;
+    std::string m_uri;
+    std::string m_server;
+    std::string m_error_reason;
+    std::vector<std::string> m_messages;
+
+    bool ifNotifier{false};
+    std::string m_ticker_price{};
+    unsigned long long m_ticker_price_time{};
+};
+
+std::ostream &operator<<(std::ostream &out, connection_metadata const &data);
+
+class websocket_endpoint {
+public:
+    websocket_endpoint() : m_next_id(0) {
+        m_endpoint.clear_access_channels(websocketpp::log::alevel::all);
+        m_endpoint.clear_error_channels(websocketpp::log::elevel::all);
+
+        m_endpoint.init_asio();
+        m_endpoint.start_perpetual();
+
+        m_thread = websocketpp::lib::make_shared<websocketpp::lib::thread>(&client::run, &m_endpoint);
+    }
+
+    ~websocket_endpoint() {
+        m_endpoint.stop_perpetual();
+
+        for (const auto &it : m_connection_map) {
+            if (it.second->get_status() != "Open") {
+                // Only close open connections
+                continue;
+            }
+
+            std::cout << "> Closing connection " << it.second->get_id() << std::endl;
+
+            websocketpp::lib::error_code ec;
+            m_endpoint.close(it.second->get_hdl(), websocketpp::close::status::going_away, "", ec);
+            if (ec) {
+                std::cout << "> Error closing connection " << it.second->get_id() << ": "
+                          << ec.message() << std::endl;
+            }
+        }
+
+        m_thread->join();
+    }
+
+    int connect(std::string const &uri) {
+        websocketpp::lib::error_code ec;
+
+        m_endpoint.set_tls_init_handler(&on_tls_init);
+        client::connection_ptr con = m_endpoint.get_connection(uri, ec);
+
+        if (ec) {
+            std::cout << "> Connect initialization error: " << ec.message() << std::endl;
+            std::cout << ec << std::endl;
+            return -1;
+        }
+
+        int new_id = m_next_id++;
+        connection_metadata::ptr metadata_ptr = websocketpp::lib::make_shared<connection_metadata>(new_id,
+                                                                                                   con->get_handle(),
+                                                                                                   uri);
+        m_connection_map[new_id] = metadata_ptr;
+
+        con->set_open_handler(websocketpp::lib::bind(
+                &connection_metadata::on_open,
+                metadata_ptr,
+                &m_endpoint,
+                websocketpp::lib::placeholders::_1
+        ));
+        con->set_fail_handler(websocketpp::lib::bind(
+                &connection_metadata::on_fail,
+                metadata_ptr,
+                &m_endpoint,
+                websocketpp::lib::placeholders::_1
+        ));
+        con->set_close_handler(websocketpp::lib::bind(
+                &connection_metadata::on_close,
+                metadata_ptr,
+                &m_endpoint,
+                websocketpp::lib::placeholders::_1
+        ));
+        con->set_message_handler(websocketpp::lib::bind(
+                &connection_metadata::on_message,
+                metadata_ptr,
+                websocketpp::lib::placeholders::_1,
+                websocketpp::lib::placeholders::_2
+        ));
+
+        m_endpoint.connect(con);
+
+        return new_id;
+    }
+
+    void close(int id, websocketpp::close::status::value code, const std::string &reason) {
+        websocketpp::lib::error_code ec;
+
+        auto metadata_it = m_connection_map.find(id);
+        if (metadata_it == m_connection_map.end()) {
+            std::cout << "> No connection found with id " << id << std::endl;
+            return;
+        }
+
+        m_endpoint.close(metadata_it->second->get_hdl(), code, reason, ec);
+        if (ec) {
+            std::cout << "> Error initiating close: " << ec.message() << std::endl;
+        }
+    }
+
+    void send(int id, const std::string &message) {
+        websocketpp::lib::error_code ec;
+
+        auto metadata_it = m_connection_map.find(id);
+        if (metadata_it == m_connection_map.end()) {
+            std::cout << "> No connection found with id " << id << std::endl;
+            return;
+        }
+
+        m_endpoint.send(metadata_it->second->get_hdl(), message, websocketpp::frame::opcode::text, ec);
+        if (ec) {
+            std::cout << "> Error sending message: " << message << ": " << ec.message() << std::endl;
+            return;
+        }
+
+        metadata_it->second->record_sent_message(message);
+    }
+
+    connection_metadata::ptr get_metadata(int id) const {
+        auto metadata_it = m_connection_map.find(id);
+        if (metadata_it == m_connection_map.end()) {
+            return connection_metadata::ptr();
+        } else {
+            return metadata_it->second;
+        }
+    }
+
+private:
+    typedef std::map<int, connection_metadata::ptr> con_id_metadata_map;
+
+    client m_endpoint;
+    websocketpp::lib::shared_ptr<websocketpp::lib::thread> m_thread;
+
+    con_id_metadata_map m_connection_map;
+    int m_next_id;
+};
+
+#endif //MINITRADE_WEBSOCKET_H
