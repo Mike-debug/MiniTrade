@@ -1,3 +1,0 @@
-C:/Users/Mike_Wei/CLionProjects/MiniTrade/build/CMakeFiles/miniTrade.dir
-C:/Users/Mike_Wei/CLionProjects/MiniTrade/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/Mike_Wei/CLionProjects/MiniTrade/build/CMakeFiles/ZERO_CHECK.dir
