@@ -1,3 +1,0 @@
-C:/Users/Mike_Wei/CLionProjects/minitrade_fix/cmake-build-debug/CMakeFiles/miniTrade.dir
-C:/Users/Mike_Wei/CLionProjects/minitrade_fix/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Mike_Wei/CLionProjects/minitrade_fix/cmake-build-debug/CMakeFiles/rebuild_cache.dir
