@@ -8,8 +8,8 @@
 #include <mutex>
 #include <condition_variable>
 
-std::mutex m_mutex;
-std::condition_variable cv;
-bool ready1 = false;
+extern std::mutex m_mutex;
+extern std::condition_variable cv;
+extern bool ready1;
 
 #endif //MINITRADE_SYNC_H

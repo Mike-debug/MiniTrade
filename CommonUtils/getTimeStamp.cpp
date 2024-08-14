@@ -3,7 +3,7 @@
 //
 
 
-#include "getTimeStamp"
+#include <CommonUtils/getTimeStamp>
 
 unsigned long long getTimeStamp(long long diff) {
     // 获取当前时间点

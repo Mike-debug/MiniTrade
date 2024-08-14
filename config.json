@@ -1,37 +1,66 @@
 {
-  "ifLog": false,
+  "ifLog": true,
   "autoTradeNum": 10,
   "diffTickerTime": 1000,
+  "sellPrice": "90000.00",
+  "buyPrice": "50001.00",
 
-  "sellPrice": "70000.00",
-  "buyPrice": "60001.00",
-  "public_key": "4r7CZpVGiBQs7G8VqMLeNv0v1daOub0fGo5GkLNCnYWm8k5FpL4uGImzgefo9qWl",
-  "private_key": "r30z3j8nyAlVWlFKp9f5Rhqkkb1hRiqIjSedmlndFRoyreO65uguMsJmqLEchbpG",
-  "testnet_url": "wss://testnet.binance.vision/ws-api/v3",
+  "public_key": "4705ece86f573014cdcabaf711b1bbdbcc33674e68b309e307c966fe5ff5905c",
+  "private_key": "0f82f3b56dc138a977051828729f188b091ef8428a4c98dddda9978cc22cba46",
+  "testnet_url": "wss://testnet.binancefuture.com/ws-fapi/v1",
   "future_url": "wss://stream.binancefuture.com/ws",
+
+  "public_key_test_future": "4705ece86f573014cdcabaf711b1bbdbcc33674e68b309e307c966fe5ff5905c",
+  "private_key_test_future": "0f82f3b56dc138a977051828729f188b091ef8428a4c98dddda9978cc22cba46",
+  "public_key_real_future": "UHhXtrsT50pS0slJE2VJVekIgwJQX5WsOPuXZ0cfVYUQvnxFHbm0GJMmxoPyr6Ws",
+  "private_key_real_future": "iiIXFqJdyVsJEqhtGwsE0JfFusdkaarGWIWZEOrsbRGy2dYWF1STThpzZURXc1Ld",
+  "public_key_test_spot": "4r7CZpVGiBQs7G8VqMLeNv0v1daOub0fGo5GkLNCnYWm8k5FpL4uGImzgefo9qWl",
+  "private_key_test_spot": "r30z3j8nyAlVWlFKp9f5Rhqkkb1hRiqIjSedmlndFRoyreO65uguMsJmqLEchbpG",
+  "public_key_real_spot": "k1iNfUR8BEINCkDXAVgT5yuM4vQowtkMdE8fKQz7ejK5ET3RbplJ3zYhgwuWdnZ3",
+  "private_key_real_spot": "RyJPYgDAIX5gZw1mzsLZLFRKYYNfCbMxrDLtwSBWbA6Fn2xtEpmUQUbMDaVIRiV9",
+  "future_testnet_url": "wss://testnet.binancefuture.com/ws-fapi/v1",
+  "future_realnet_url": "wss://ws-fapi.binance.com/ws-fapi/v1",
+  "realspotnet_urlu1": "wss://ws-api.binance.com/ws-api/v3",
+  "testnet_urlu": "wss://testnet.binance.vision/ws-api/v3",
 
   "tradeRequest": {
     "id": "1714883957258",
     "method": "order.place",
     "params": {
-      "apiKey": "4r7CZpVGiBQs7G8VqMLeNv0v1daOub0fGo5GkLNCnYWm8k5FpL4uGImzgefo9qWl",
+      "apiKey": "eHxqqa5Etle4n2XHQQP8IiUc7zfGn2a7sYDgE99qxFUBx2TF8Jl5hYZV78nJOe5g",
       "newOrderRespType": "ACK",
-      "price": "70000.00",
-      "quantity": "0.01000000",
+      "price": "3400.00",
+      "quantity": "0.01",
       "recvWindow": "1000",
       "side": "SELL",
       "signature": "ff60f1f01f12e0d1537758dd4ac13de8a8f0ff95c3f398fe2a7f1c249c342441",
-      "symbol": "BTCUSDT",
+      "symbol": "ETHUSDT",
       "timeInForce": "GTC",
       "timestamp": "1714883957258",
       "type": "LIMIT"
+    }
+  },
+  "tradeFutureRequest": {
+    "id": "3f7df6e3-2df4-44b9-9919-d2f38f90a99a",
+    "method": "order.place",
+    "params": {
+      "apiKey": "HMOchcfii9ZRZnhjp2XjGXhsOBd6msAhKz9joQaWwZ7arcJTlD2hGPHQj1lGdTjR",
+      "positionSide": "BOTH",
+      "price": "43187.00",
+      "quantity": 0.001,
+      "side": "BUY",
+      "symbol": "BTCUSDT",
+      "timeInForce": "GTC",
+      "timestamp": 1702555533821,
+      "type": "LIMIT",
+      "signature": "0f04368b2d22aafd0ggc8809ea34297eff602272917b5f01267db4efbc1c9422"
     }
   },
   "cancelRequest": {
     "id": "1714884036942",
     "method": "order.cancel",
     "params": {
-      "apiKey": "4r7CZpVGiBQs7G8VqMLeNv0v1daOub0fGo5GkLNCnYWm8k5FpL4uGImzgefo9qWl",
+      "apiKey": "eHxqqa5Etle4n2XHQQP8IiUc7zfGn2a7sYDgE99qxFUBx2TF8Jl5hYZV78nJOe5g",
       "origClientOrderId": "R1cZ4SuaMIvdFNPyrn9Pzu",
       "signature": "6eb60ebccf28c1d8c77ba40d4540075521957b93573b310d91541648eaa208e7",
       "symbol": "BTCUSDT",
@@ -80,6 +109,129 @@
     "i": "63317.89680851",
     "r": "-0.00300000",
     "T": 1714896000000
+  },
+  "allOrdersRequest": {
+    "id": "734235c2-13d2-4574-be68-723e818c08f3",
+    "method": "allOrders",
+    "params": {
+      "symbol": "ETHUSDT",
+      "startTime": 1660780800000,
+      "endTime": 1660867200000,
+      "limit": 500,
+      "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+      "signature": "f50a972ba7fad92842187643f6b930802d4e20bce1ba1e788e856e811577bd42",
+      "timestamp": 1661955123341
+    }
+  },
+  "allOrdersResponse": {
+    "id": "734235c2-13d2-4574-be68-723e818c08f3",
+    "status": 200,
+    "result": [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 12569099453,
+        "orderListId": -1,
+        "clientOrderId": "4d96324ff9d44481926157",
+        "price": "23416.10000000",
+        "origQty": "0.00847000",
+        "executedQty": "0.00847000",
+        "cummulativeQuoteQty": "198.33521500",
+        "status": "FILLED",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "SELL",
+        "stopPrice": "0.00000000",
+        "icebergQty": "0.00000000",
+        "time": 1660801715639,
+        "updateTime": 1660801717945,
+        "isWorking": true,
+        "workingTime": 1660801715639,
+        "origQuoteOrderQty": "0.00000000",
+        "selfTradePreventionMode": "NONE",
+        "preventedMatchId": 0,
+        "preventedQuantity": "1.200000"
+      }
+    ],
+    "rateLimits": [
+      {
+        "rateLimitType": "REQUEST_WEIGHT",
+        "interval": "MINUTE",
+        "intervalNum": 1,
+        "limit": 6000,
+        "count": 20
+      }
+    ]
+  },
+  "accountStatusResquest": {
+    "id": "605a6d20-6588-4cb9-afa0-b0ab087507ba",
+    "method": "account.status",
+    "params": {
+      "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+      "signature": "83303b4a136ac1371795f465808367242685a9e3a42b22edb4d977d0696eb45c",
+      "timestamp": 1660801839480
+    }
+  },
+  "accountStatusResponse": {
+    "id": "605a6d20-6588-4cb9-afa0-b0ab087507ba",
+    "status": 200,
+    "result": {
+      "makerCommission": 15,
+      "takerCommission": 15,
+      "buyerCommission": 0,
+      "sellerCommission": 0,
+      "canTrade": true,
+      "canWithdraw": true,
+      "canDeposit": true,
+      "commissionRates": {
+        "maker": "0.00150000",
+        "taker": "0.00150000",
+        "buyer": "0.00000000",
+        "seller": "0.00000000"
+      },
+      "brokered": false,
+      "requireSelfTradePrevention": false,
+      "preventSor": false,
+      "updateTime": 1660801833000,
+      "accountType": "SPOT",
+      "balances": [
+        {
+          "asset": "BNB",
+          "free": "0.00000000",
+          "locked": "0.00000000"
+        },
+        {
+          "asset": "BTC",
+          "free": "1.3447112",
+          "locked": "0.08600000"
+        },
+        {
+          "asset": "USDT",
+          "free": "1021.21000000",
+          "locked": "0.00000000"
+        }
+      ],
+      "permissions": [
+        "SPOT"
+      ],
+      "uid": 354937868
+    },
+    "rateLimits": [
+      {
+        "rateLimitType": "REQUEST_WEIGHT",
+        "interval": "MINUTE",
+        "intervalNum": 1,
+        "limit": 6000,
+        "count": 20
+      }
+    ]
+  },
+  "exchangeInfoRequest": {
+    "id": "5494febb-d167-46a2-996d-70533eb4d976",
+    "method": "exchangeInfo",
+    "params": {
+      "symbols": [
+        "ETHUSDT"
+      ]
+    }
   }
 }
-

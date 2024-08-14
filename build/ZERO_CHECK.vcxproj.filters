@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Mike_Wei\CLionProjects\MiniTrade\build\CMakeFiles\b9959e8e6acd0b5dfc20d8514d5afc60\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{93614971-E95A-3ED3-AFB4-31FF9676AF7C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

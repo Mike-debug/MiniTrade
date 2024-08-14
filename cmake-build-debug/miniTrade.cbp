@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="miniTrade"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="msvc8"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\program\;CMake Files\..\..\program\vcpkg-2024.04.26\;CMake Files\..\..\program\vcpkg-2024.04.26\scripts\;CMake Files\..\..\program\vcpkg-2024.04.26\scripts\buildsystems\;CMake Files\..\..\program\vcpkg-2024.04.26\installed\;CMake Files\..\..\program\vcpkg-2024.04.26\installed\x64-windows\;CMake Files\..\..\program\vcpkg-2024.04.26\installed\x64-windows\share\;CMake Files\..\..\program\vcpkg-2024.04.26\installed\x64-windows\share\boost\;CMake Files\..\..\program\vcpkg-2024.04.26\installed\x64-windows\share\openssl\;CMake Files\..\..\program\vcpkg-2024.04.26\installed\x64-windows\share\jsoncpp\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 all"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="miniTrade">
+				<Option output="C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-debug/miniTrade.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add directory="C:/Users/Mike_Wei/CLionProjects/websocketpp-0.8.2"/>
+					<Add directory="C:/Users/Mike_Wei/CLionProjects/MiniTrade"/>
+					<Add directory="C:/Users/Mike_Wei/program/vcpkg-2024.04.26/installed/x64-windows/include"/>
+					<Add directory="C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.39.33519\include"/>
+					<Add directory="C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.39.33519\ATLMFC\include"/>
+					<Add directory="C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\VS\include"/>
+					<Add directory="C:\Windows Kits\10\include\10.0.22621.0\ucrt"/>
+					<Add directory="C:\Windows Kits\10\\include\10.0.22621.0\\um"/>
+					<Add directory="C:\Windows Kits\10\\include\10.0.22621.0\\shared"/>
+					<Add directory="C:\Windows Kits\10\\include\10.0.22621.0\\winrt"/>
+					<Add directory="C:\Windows Kits\10\\include\10.0.22621.0\\cppwinrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 miniTrade"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="miniTrade/fast">
+				<Option output="C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-debug/miniTrade.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add directory="C:/Users/Mike_Wei/CLionProjects/websocketpp-0.8.2"/>
+					<Add directory="C:/Users/Mike_Wei/CLionProjects/MiniTrade"/>
+					<Add directory="C:/Users/Mike_Wei/program/vcpkg-2024.04.26/installed/x64-windows/include"/>
+					<Add directory="C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.39.33519\include"/>
+					<Add directory="C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.39.33519\ATLMFC\include"/>
+					<Add directory="C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\VS\include"/>
+					<Add directory="C:\Windows Kits\10\include\10.0.22621.0\ucrt"/>
+					<Add directory="C:\Windows Kits\10\\include\10.0.22621.0\\um"/>
+					<Add directory="C:\Windows Kits\10\\include\10.0.22621.0\\shared"/>
+					<Add directory="C:\Windows Kits\10\\include\10.0.22621.0\\winrt"/>
+					<Add directory="C:\Windows Kits\10\\include\10.0.22621.0\\cppwinrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 miniTrade/fast"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 edit_cache"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Users/Mike_Wei/CLionProjects/MiniTrade/CommonUtils/generateSignature.cpp">
+			<Option target="miniTrade"/>
+		</Unit>
+		<Unit filename="C:/Users/Mike_Wei/CLionProjects/MiniTrade/CommonUtils/getTimeStamp.cpp">
+			<Option target="miniTrade"/>
+		</Unit>
+		<Unit filename="C:/Users/Mike_Wei/CLionProjects/MiniTrade/main.cpp">
+			<Option target="miniTrade"/>
+		</Unit>
+		<Unit filename="C:/Users/Mike_Wei/CLionProjects/MiniTrade/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="C:/Users/Mike_Wei/CLionProjects/MiniTrade/../../program/vcpkg-2024.04.26/scripts/buildsystems/vcpkg.cmake">
+			<Option virtualFolder="CMake Files\..\..\program\vcpkg-2024.04.26\scripts\buildsystems\"/>
+		</Unit>
+		<Unit filename="C:/Users/Mike_Wei/CLionProjects/MiniTrade/../../program/vcpkg-2024.04.26/installed/x64-windows/share/boost/vcpkg-cmake-wrapper.cmake">
+			<Option virtualFolder="CMake Files\..\..\program\vcpkg-2024.04.26\installed\x64-windows\share\boost\"/>
+		</Unit>
+		<Unit filename="C:/Users/Mike_Wei/CLionProjects/MiniTrade/../../program/vcpkg-2024.04.26/installed/x64-windows/share/openssl/vcpkg-cmake-wrapper.cmake">
+			<Option virtualFolder="CMake Files\..\..\program\vcpkg-2024.04.26\installed\x64-windows\share\openssl\"/>
+		</Unit>
+		<Unit filename="C:/Users/Mike_Wei/CLionProjects/MiniTrade/../../program/vcpkg-2024.04.26/installed/x64-windows/share/jsoncpp/jsoncpp-namespaced-targets.cmake">
+			<Option virtualFolder="CMake Files\..\..\program\vcpkg-2024.04.26\installed\x64-windows\share\jsoncpp\"/>
+		</Unit>
+		<Unit filename="C:/Users/Mike_Wei/CLionProjects/MiniTrade/../../program/vcpkg-2024.04.26/installed/x64-windows/share/jsoncpp/jsoncpp-targets-debug.cmake">
+			<Option virtualFolder="CMake Files\..\..\program\vcpkg-2024.04.26\installed\x64-windows\share\jsoncpp\"/>
+		</Unit>
+		<Unit filename="C:/Users/Mike_Wei/CLionProjects/MiniTrade/../../program/vcpkg-2024.04.26/installed/x64-windows/share/jsoncpp/jsoncpp-targets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\program\vcpkg-2024.04.26\installed\x64-windows\share\jsoncpp\"/>
+		</Unit>
+		<Unit filename="C:/Users/Mike_Wei/CLionProjects/MiniTrade/../../program/vcpkg-2024.04.26/installed/x64-windows/share/jsoncpp/jsoncpp-targets.cmake">
+			<Option virtualFolder="CMake Files\..\..\program\vcpkg-2024.04.26\installed\x64-windows\share\jsoncpp\"/>
+		</Unit>
+		<Unit filename="C:/Users/Mike_Wei/CLionProjects/MiniTrade/../../program/vcpkg-2024.04.26/installed/x64-windows/share/jsoncpp/jsoncppConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\program\vcpkg-2024.04.26\installed\x64-windows\share\jsoncpp\"/>
+		</Unit>
+		<Unit filename="C:/Users/Mike_Wei/CLionProjects/MiniTrade/../../program/vcpkg-2024.04.26/installed/x64-windows/share/jsoncpp/jsoncppConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\program\vcpkg-2024.04.26\installed\x64-windows\share\jsoncpp\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

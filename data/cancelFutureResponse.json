@@ -1,0 +1,39 @@
+{
+  "id": "1717662416110",
+  "status": 200,
+  "result": {
+    "orderId": 1388119965,
+    "symbol": "ETHUSDT",
+    "status": "CANCELED",
+    "clientOrderId": "x-oOKYBTym199111050004",
+    "price": "1000.00",
+    "avgPrice": "0.00",
+    "origQty": "0.020",
+    "executedQty": "0.000",
+    "cumQty": "0.000",
+    "cumQuote": "0.00000",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "reduceOnly": false,
+    "closePosition": false,
+    "side": "BUY",
+    "positionSide": "BOTH",
+    "stopPrice": "0.00",
+    "workingType": "CONTRACT_PRICE",
+    "priceProtect": false,
+    "origType": "LIMIT",
+    "priceMatch": "NONE",
+    "selfTradePreventionMode": "NONE",
+    "goodTillDate": 0,
+    "updateTime": 1717662416467
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 1
+    }
+  ]
+}

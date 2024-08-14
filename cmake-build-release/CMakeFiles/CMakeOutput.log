@@ -1,0 +1,134 @@
+The system is: Windows - 10.0.22000 - AMD64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: C:/Users/Mike_Wei/program/Microsoft Visual Studio/2022/Professional/VC/Tools/MSVC/14.40.33807/bin/Hostx86/x64/cl.exe 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+Microsoft (R) C/C++ Optimizing Compiler Version 19.40.33812 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+CMakeCCompilerId.c
+Microsoft (R) Incremental Linker Version 14.40.33812.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:CMakeCCompilerId.exe 
+CMakeCCompilerId.obj 
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.exe"
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.obj"
+
+The C compiler identification is MSVC, found in "C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-release/CMakeFiles/3.24.2/CompilerIdC/CMakeCCompilerId.exe"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: C:/Users/Mike_Wei/program/Microsoft Visual Studio/2022/Professional/VC/Tools/MSVC/14.40.33807/bin/Hostx86/x64/cl.exe 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+Microsoft (R) C/C++ Optimizing Compiler Version 19.40.33812 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+CMakeCXXCompilerId.cpp
+Microsoft (R) Incremental Linker Version 14.40.33812.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:CMakeCXXCompilerId.exe 
+CMakeCXXCompilerId.obj 
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.exe"
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.obj"
+
+The CXX compiler identification is MSVC, found in "C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-release/CMakeFiles/3.24.2/CompilerIdCXX/CMakeCXXCompilerId.exe"
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-release/CMakeFiles/CMakeTmp
+
+Run Build Command(s):nmake -f Makefile /nologo cmTC_29f75\fast && 	"C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.40.33807\bin\HostX86\x64\nmake.exe"  -f CMakeFiles\cmTC_29f75.dir\build.make /nologo -L                  CMakeFiles\cmTC_29f75.dir\build
+Building C object CMakeFiles/cmTC_29f75.dir/CMakeCCompilerABI.c.obj
+	C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -E cmake_cl_compile_depends --dep-file=CMakeFiles\cmTC_29f75.dir\CMakeCCompilerABI.c.obj.d --working-dir=C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-release\CMakeFiles\CMakeTmp --filter-prefix="Note: including file: " -- C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1440~1.338\bin\Hostx86\x64\cl.exe @C:\Users\Mike_Wei\AppData\Local\Temp\nm520F.tmp
+CMakeCCompilerABI.c
+Linking C executable cmTC_29f75.exe
+	C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -E vs_link_exe --intdir=CMakeFiles\cmTC_29f75.dir --rc=C:\WINDOW~1\10\bin\100226~1.0\x86\rc.exe --mt=C:\WINDOW~1\10\bin\100226~1.0\x86\mt.exe --manifests -- C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1440~1.338\bin\Hostx86\x64\link.exe /nologo @CMakeFiles\cmTC_29f75.dir\objects1.rsp @C:\Users\Mike_Wei\AppData\Local\Temp\nm52AC.tmp
+
+
+
+The system is: Windows - 10.0.22000 - AMD64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: C:/Users/Mike_Wei/program/Microsoft Visual Studio/2022/Professional/VC/Tools/MSVC/14.40.33807/bin/Hostx86/x64/cl.exe 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+Microsoft (R) C/C++ Optimizing Compiler Version 19.40.33812 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+CMakeCCompilerId.c
+Microsoft (R) Incremental Linker Version 14.40.33812.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:CMakeCCompilerId.exe 
+CMakeCCompilerId.obj 
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.exe"
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.obj"
+
+The C compiler identification is MSVC, found in "C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-release/CMakeFiles/3.24.2/CompilerIdC/CMakeCCompilerId.exe"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: C:/Users/Mike_Wei/program/Microsoft Visual Studio/2022/Professional/VC/Tools/MSVC/14.40.33807/bin/Hostx86/x64/cl.exe 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+Microsoft (R) C/C++ Optimizing Compiler Version 19.40.33812 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+CMakeCXXCompilerId.cpp
+Microsoft (R) Incremental Linker Version 14.40.33812.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:CMakeCXXCompilerId.exe 
+CMakeCXXCompilerId.obj 
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.exe"
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.obj"
+
+The CXX compiler identification is MSVC, found in "C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-release/CMakeFiles/3.24.2/CompilerIdCXX/CMakeCXXCompilerId.exe"
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-release/CMakeFiles/CMakeTmp
+
+Run Build Command(s):nmake -f Makefile /nologo cmTC_58234\fast && 	"C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.40.33807\bin\HostX86\x64\nmake.exe"  -f CMakeFiles\cmTC_58234.dir\build.make /nologo -L                  CMakeFiles\cmTC_58234.dir\build
+Building C object CMakeFiles/cmTC_58234.dir/CMakeCCompilerABI.c.obj
+	C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -E cmake_cl_compile_depends --dep-file=CMakeFiles\cmTC_58234.dir\CMakeCCompilerABI.c.obj.d --working-dir=C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-release\CMakeFiles\CMakeTmp --filter-prefix="Note: including file: " -- C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1440~1.338\bin\Hostx86\x64\cl.exe @C:\Users\Mike_Wei\AppData\Local\Temp\nm60B5.tmp
+CMakeCCompilerABI.c
+Linking C executable cmTC_58234.exe
+	C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -E vs_link_exe --intdir=CMakeFiles\cmTC_58234.dir --rc=C:\WINDOW~1\10\bin\100226~1.0\x86\rc.exe --mt=C:\WINDOW~1\10\bin\100226~1.0\x86\mt.exe --manifests -- C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1440~1.338\bin\Hostx86\x64\link.exe /nologo @CMakeFiles\cmTC_58234.dir\objects1.rsp @C:\Users\Mike_Wei\AppData\Local\Temp\nm6133.tmp
+
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: C:/Users/Mike_Wei/CLionProjects/MiniTrade/cmake-build-release/CMakeFiles/CMakeTmp
+
+Run Build Command(s):nmake -f Makefile /nologo cmTC_ae577\fast && 	"C:\Users\Mike_Wei\program\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC\14.40.33807\bin\HostX86\x64\nmake.exe"  -f CMakeFiles\cmTC_ae577.dir\build.make /nologo -L                  CMakeFiles\cmTC_ae577.dir\build
+Building CXX object CMakeFiles/cmTC_ae577.dir/CMakeCXXCompilerABI.cpp.obj
+	C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -E cmake_cl_compile_depends --dep-file=CMakeFiles\cmTC_ae577.dir\CMakeCXXCompilerABI.cpp.obj.d --working-dir=C:\Users\Mike_Wei\CLionProjects\MiniTrade\cmake-build-release\CMakeFiles\CMakeTmp --filter-prefix="Note: including file: " -- C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1440~1.338\bin\Hostx86\x64\cl.exe @C:\Users\Mike_Wei\AppData\Local\Temp\nm645F.tmp
+CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_ae577.exe
+	C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -E vs_link_exe --intdir=CMakeFiles\cmTC_ae577.dir --rc=C:\WINDOW~1\10\bin\100226~1.0\x86\rc.exe --mt=C:\WINDOW~1\10\bin\100226~1.0\x86\mt.exe --manifests -- C:\Users\Mike_Wei\program\MICROS~1\2022\PROFES~1\VC\Tools\MSVC\1440~1.338\bin\Hostx86\x64\link.exe /nologo @CMakeFiles\cmTC_ae577.dir\objects1.rsp @C:\Users\Mike_Wei\AppData\Local\Temp\nm64FC.tmp
+
+
+

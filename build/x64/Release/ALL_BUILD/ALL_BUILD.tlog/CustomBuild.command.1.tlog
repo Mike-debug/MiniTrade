@@ -1,0 +1,10 @@
+^C:\USERS\MIKE_WEI\CLIONPROJECTS\MINITRADE\CMAKELISTS.TXT
+setlocal
+C:\Users\Mike_Wei\program\cmake-3.24.2-windows-x86_64\bin\cmake.exe -SC:/Users/Mike_Wei/CLionProjects/MiniTrade -BC:/Users/Mike_Wei/CLionProjects/MiniTrade/build --check-stamp-file C:/Users/Mike_Wei/CLionProjects/MiniTrade/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
